@@ -35,9 +35,3 @@ usuarioRandom.countMascotas()
 usuarioRandom.addBook("El señor de los anillos", "J. R. R. Tolkien")
 usuarioRandom.getBookNames()
 
-
-
-
-
-
-
