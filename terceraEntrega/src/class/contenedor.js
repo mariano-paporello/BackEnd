@@ -16,12 +16,10 @@ constructor(nombreArchivo) {
   this.nombreArchivo = nombreArchivo;
 }
 
- save(object) {
+ async save(object) {
   if (typeof object === "object") {
-     fs.readFile(`./${this.nombreArchivo}`, "utf-8", (err, data) => {
-      if (err) {
-        throw new Error(err);
-      }
+    const data = await fs.promises.readFile(`./${this.nombreArchivo}`, "utf-8")
+      
       if (data.length === 0) {
         const newData = [{ ...object, id: 1 }];
         funcionEscritora(newData);
@@ -35,17 +33,15 @@ constructor(nombreArchivo) {
         funcionEscritora(newData);
         console.log("Se añadio un producto");
       }
-    });
+    ;
   } else {
     throw new Error("Tenes que mandar un objeto panflin");
   }
 }
 
- getById(id) {
-   fs.readFile(`./${this.nombreArchivo}`, "utf-8", (error, data) => {
-    if (error) {
-      throw new Error(error);
-    }
+ async getById(id) {
+   const data = await fs.promises.readFile(`./${this.nombreArchivo}`, "utf-8")    
+   
     if (data.length != 0) {
       const dataObject = JSON.parse(data);
       const objetoEncontrado = dataObject.filter(
@@ -62,28 +58,23 @@ constructor(nombreArchivo) {
     } else {
       console.log("No hay nada dentro del archivo get id");
     }
-  });
 }
 
- getAll() {
-   fs.readFile(`./${this.nombreArchivo}`, "utf-8", (error, data) => {
-    if (error) {
-      throw new Error(error);
-    }
+ async getAll() {
+  const data = await fs.promises.readFile(`./${this.nombreArchivo}`, "utf-8")
+    
     if (data.length != 0) {
       const dataObject = JSON.parse(data);
       return dataObject
     } else {
       console.log("No hay nada dentro del archivo get all");
     }
-  });
+  ;
 }
 
- deleteById(number) {
-   fs.readFile(`./${this.nombreArchivo}`, "utf-8", (error, data) => {
-    if (error) {
-      throw new Error(error);
-    }
+ async deleteById(number) {
+  const data = await fs.promises.readFile(`./${this.nombreArchivo}`, "utf-8")
+    
     if (data.length != 0 ) {
       const dataObject = JSON.parse(data);
       const arraySinObjeto = dataObject.filter(
@@ -98,20 +89,21 @@ constructor(nombreArchivo) {
     } else {
       console.log("No hay un objeto con ese Id");
     }
-  });
+  ;
 }
 
- deleteAll() {
-  setTimeout(async ()=>{
+async deleteAll() {
+  
     await fs.promises.writeFile(`./${this.nombreArchivo}`, "", (err) => {
       if (err) {
         throw new Error(err);
       }
       
     });
-  }, 1000)
+
   console.log("Se a Borrado Todo dentro del archivo");
 }
 }
 
-export default Contenedor
+const contenedor = new Contenedor(txtPath)
+export default contenedor
