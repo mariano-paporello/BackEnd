@@ -1,3 +1,4 @@
+const { application } = require('express');
 const express = require('express');
 const rutaProductos = new express.Router()
 const productos = require('../temp/productos')
@@ -9,17 +10,23 @@ rutaProductos.get('/', async (require, resolve) => {
     resolve.json(productos);
 })
 
-
 rutaProductos.get('/:id', (require, resolve) => {
     const idBuscado = require.params.id
     // ACA UNA COSA PARA REVISAR QUE SE ESTEN PASANDO BIEN LOS DATOS
     const productoEncontrado = productos.filter(element => element.id == idBuscado)
+    if(productoEncontrado.length === 0){
+		return resolve.status(404).json({ error : 'producto no encontrado' })
+	}
     resolve.json(productoEncontrado[0])
 })
 
 rutaProductos.post('/', (require, resolve) => {
     const {title, price, thumbnail} = require.body
-    // if(!title){} ACA REVISAR QUE TODO LO INGRESADO ESTE BIEN
+    if(!title || !price || !thumbnail) {
+		return resolve.status(400).json({
+			msg: "Campos incompletos , media pila :|"
+		})
+	}
     const nuevoProducto = {
         id: productos.length !== 0 ? productos[productos.length - 1].id + 1 : 1,
         title: title,
@@ -38,7 +45,15 @@ rutaProductos.put('/:id', (require, resolve) => {
         price,
         thumbnail
     } = require.body
+	if(!title || !price|| !thumbnail) {
+		return resolve.status(400).json({
+			msg: "Campos incompletos, media pila :|"
+		})
+	}
     const index = productos.findIndex(element => element.id == idBuscado)
+    if(index<0){
+        return resolve.status(404).json({ error : 'producto no encontrado' })
+    }
     const productoActualizado = {
         id: productos[index].id,
         title: title,
@@ -51,11 +66,14 @@ rutaProductos.put('/:id', (require, resolve) => {
 
 rutaProductos.delete('/:id', (require, resolve) => {
     const idBuscado = require.params.id
-    const index = productos.indexOf(element=>element.id===idBuscado)
-    productos.splice(index,1)
-    resolve.send(`Se borró el producto con el id buscado (${idBuscado})`)
+    const index = productos.findIndex(element=>element.id==idBuscado)
+    const productoEliminado = productos.splice(index,1)
+    if(productoEliminado.length == 0){
+		return resolve.status(404).json({ error : 'producto no encontrado' })
+	}
+    resolve.json({
+        msg:`Se a borrado un producto con id: ${idBuscado}`
+    })
 })
-
-
 
 module.exports = rutaProductos;
