@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="https://w1.pngwing.com/pngs/805/859/png-transparent-shield-logo-boca-juniors-la-boca-buenos-aires-football-copa-libertadores-sports-argentina-yellow.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PAGINA PRUEBA</title> 
+    <style>
+      h1{
+        color: white;
+        font-weight: bolder;
+      }
+      a{
+        font-size: larger;
+        list-style: none;
+        color: white;
+        font-weight: bolder;
+        border: solid 2px white;
+        background-color: grey;
+        padding: 3px;
+      }
+      li{
+        color: white;
+        list-style: none;
+      }
+      body{
+        background-image: url("http://www.solofondos.com/wp-content/uploads/2015/11/21omxpw.jpg");
+        background-size: cover;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+      }
+      input{
+        background-color: blanchedalmond;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Añadir Productos Formulario</h1>
+<form action="/api/productos" method="post">
+  <ul>
+    <li>
+      <label for="titulo">Nombre del Producto:</label>
+      <input type="text" id="titulo" name="title"/>
+    </li>
+    <li>
+      <label for="precio">Precio del Producto:</label>
+      <input type="text" id="price" name="price"/>
+    </li>
+    <li>
+      <label for="Imagen">Imagen del producto:</label>
+      <input type="text" id="thumbnail" name="thumbnail"/>
+    </li>
+    <li class="button">
+      <button type="submit">Envía Nuevo Producto</button>
+    </li>
+  </ul>
+</form>
+<br/>
+<a href="/api/productos">Mirar todos los productos que tenemos</a>
+<br/>
+</body>
+</html>
+
