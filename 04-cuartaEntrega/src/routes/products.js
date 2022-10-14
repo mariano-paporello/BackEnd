@@ -1,12 +1,12 @@
 const express = require('express');
 const rutaProductos = new express.Router()
+const productos = require('../temp/productos')
 
-let productos = []
+
 
 rutaProductos.get('/', async (require, resolve) => {
-    const dataTitulosOnly = productos.map(element => element.title).join(", ")
     // ACA HAY QUE VER PARA HACER REVISIONES DE SI HAY COSAS O NO DENTRO DEL ARRAY PRODUCTOS
-    resolve.send(`<h1>Todos los Productos: ${dataTitulosOnly}</h1>`);
+    resolve.json(productos);
 })
 
 
@@ -14,10 +14,7 @@ rutaProductos.get('/:id', (require, resolve) => {
     const idBuscado = require.params.id
     // ACA UNA COSA PARA REVISAR QUE SE ESTEN PASANDO BIEN LOS DATOS
     const productoEncontrado = productos.filter(element => element.id == idBuscado)
-    resolve.send(`<h1>Producto Encontrado</h1>
-    <h3>Nombre del  Producto: ${productoEncontrado[0].title}</h3>
-    <h3>Precio del Producto: $${productoEncontrado[0].price}</h3>
-    <h3>Imagen del Producto: ${productoEncontrado[0].thumbnail}</h3>`)
+    resolve.json(productoEncontrado[0])
 })
 
 rutaProductos.post('/', (require, resolve) => {
@@ -31,13 +28,7 @@ rutaProductos.post('/', (require, resolve) => {
     }
     productos.push(nuevoProducto)
     console.log("Recibo un producto y le devuelvo un nuevo id")
-    resolve.send(`
-    <h1>Nuevo Producto</h1>
-    <h3>Nombre del  Producto: ${nuevoProducto.title}</h3>
-    <h3>Precio del Producto: $${nuevoProducto.price}</h3>
-    <h3>Imagen del Producto: ${nuevoProducto.thumbnail}</h3>
-    <a href="/">Volver a el inicio</a>
-    `)
+    resolve.json(nuevoProducto)
 })
 
 rutaProductos.put('/:id', (require, resolve) => {
@@ -55,13 +46,7 @@ rutaProductos.put('/:id', (require, resolve) => {
         thumbnail: thumbnail
     }
     productos.splice(index, 1, productoActualizado)
-    resolve.send(`
- <h1>Producto Actualizado</h1>
-    <h3>Nombre del  Producto: ${productoActualizado.title}</h3>
-    <h3>Precio del Producto: $${productoActualizado.price}</h3>
-    <h3>Imagen del Producto: ${productoActualizado.thumbnail}</h3>
-    <a href="/">Volver a el inicio</a>
- `)
+    resolve.json(productoActualizado)
 })
 
 rutaProductos.delete('/:id', (require, resolve) => {
