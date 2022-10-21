@@ -32,9 +32,7 @@ rutaPrincipal.post('/', (require, resolve) => {
     }
     productos.push(nuevoProducto)
     console.log("Recibo un producto y le devuelvo un nuevo id")
-    resolve.json({
-
-    })
+    resolve.redirect('/productos')
 })
 
 rutaPrincipal.put('/:id', (require, resolve) => {

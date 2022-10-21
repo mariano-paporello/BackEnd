@@ -1,5 +1,4 @@
 <h3>Lista de Productos Disponibles:</h3>
-
 <table style="border: 1px black solid;">
   <tr>
     <th id="id">ID</th>
@@ -19,10 +18,10 @@
         {{this.price}}
       </td>
       <td>
-        {{this.thumbnail}}
+       <img src={{this.thumbnail}} alt=""> 
       </td>
     </tr>
     {{else}}
-        <p class="empty">No content</p>
+        <h3 class="empty">No content</h3>
    {{/each}}
 </table>
