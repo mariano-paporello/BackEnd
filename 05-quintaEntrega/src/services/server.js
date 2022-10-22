@@ -30,8 +30,7 @@ app.engine('hbs', engine({
 
 
 app.get('/', (req, res)=>{
-    const dataDinamica= {nombre:'culo'}
-    res.render('main', dataDinamica)
+    res.render('main')
 })
 app.get('/productos', (req,res)=>{
     const dataDinamica = {
