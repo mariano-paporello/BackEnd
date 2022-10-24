@@ -37,7 +37,6 @@ app.get('/productos', (req,res)=>{
         productos
     }
     res.render('products', dataDinamica)
-    console.log(dataDinamica)
 })
 
 app.use('/productos', rutaPrincipal);

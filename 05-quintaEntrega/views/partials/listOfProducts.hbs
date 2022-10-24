@@ -1,5 +1,5 @@
-<h3>Lista de Productos Disponibles:</h3>
 <table style="border: 1px black solid;">
+  {{#if productos}}
   <tr>
     <th id="id">ID</th>
     <th id="nombreHeader">Nombre</th>
@@ -18,10 +18,14 @@
         {{this.price}}
       </td>
       <td>
-       <img src={{this.thumbnail}} alt=""> 
+       <img class="image-table rounded" src={{this.thumbnail}} alt=""> 
       </td>
     </tr>
     {{else}}
-        <h3 class="empty">No content</h3>
+        <h3 class="empty">No content for iteration</h3>
    {{/each}}
+   {{else}}
+   <h2 class="text-danger">No se encontraron productos</h2>
+   {{/if}}
+   
 </table>
