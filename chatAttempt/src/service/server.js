@@ -1,9 +1,9 @@
 const express = require('express')
 const http = require('http')
 const path = require('path')
-const io = require('socket.io')
 const { engine } = require('express-handlebars')
 const app = express()
+const mensages = require('../temp/mensajes')
 
 app.use(express.json())
 app.use(express.static('public'))
@@ -47,6 +47,7 @@ SocketServer.on('connection', (socket)=>{
             mensajeGeneral: data.mensajeGeneral,
             style:colorOfUser
         }
+        mensages.push(dataCompleta)
         SocketServer.emit('mensajeGeneral', dataCompleta)
     })
 
