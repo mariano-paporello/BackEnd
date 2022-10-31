@@ -2,6 +2,7 @@ const express = require('express')
 const http = require('http')
 const path = require('path')
 const { engine } = require('express-handlebars')
+const io = require('socket.io')
 const app = express()
 const mensages = require('../temp/mensajes')
 

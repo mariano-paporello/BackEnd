@@ -90,16 +90,12 @@ userForm.addEventListener("submit", (ev)=>{
              ...data,
               mensajeGeneral: general.value
           }
-          console.log(data)
+
           socket.emit('enviarMensaje', mensajeGeneral)
           general.value = ''
 
 
-          socket.on('imprimirMensaje', data=>{
-            const p = document.createElement('p')
-             p.innerText=`${data.mensajeGeneral}`
-             mensajesDiv.appendChild(p)
-         })
+          
 
       })
       }
@@ -108,6 +104,12 @@ userForm.addEventListener("submit", (ev)=>{
       }
      
     })
+    socket.on('imprimirMensaje', data=>{
+      const p = document.createElement('p')
+       p.innerText=`${data.mensajeGeneral}`
+       console.log(data)
+       mensajesDiv.appendChild(p)
+   })
   }
 })
 

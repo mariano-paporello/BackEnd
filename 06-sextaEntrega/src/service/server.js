@@ -1,6 +1,7 @@
 const express = require('express')
 const http = require('http')
 const io = require('socket.io')
+const moment = require('moment')
 const {
     engine
 } = require('express-handlebars')
@@ -71,10 +72,10 @@ SocketServer.on('connection', (socket) => {
     })
     socket.on('enviarMensaje', data=>{
         const dataCompleta = {
-            mensajeGeneral: `${data.nombre} ${data.email}: ${data.mensajeGeneral} `,
+            mensajeGeneral: `${data.nombre} ${data.email}: ${data.mensajeGeneral}  [${moment().format('h:mmA')}(${moment().format('L')})]`,
         }
         mensajes.push(dataCompleta)
-        console.log(mensajes)
+        console.log(`mensajes: ${mensajes}`)
         SocketServer.emit('imprimirMensaje', dataCompleta)
     })
 })
