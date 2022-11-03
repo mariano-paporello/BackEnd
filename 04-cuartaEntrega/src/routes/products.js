@@ -1,4 +1,3 @@
-const { application } = require('express');
 const express = require('express');
 const rutaProductos = new express.Router()
 const productos = require('../temp/productos')
