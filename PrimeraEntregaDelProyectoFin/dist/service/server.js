@@ -10,7 +10,4 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.static('public'));
 app.use("/api", index_1.default);
-app.get('/', function (req, res) {
-    console.log("hola desde api/");
-});
 exports.default = app;

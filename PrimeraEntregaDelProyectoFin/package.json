@@ -14,6 +14,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "moment": "^2.29.4",
     "nodemon": "^2.0.12",
     "ts-node": "^10.2.0",
     "typescript": "^4.3.5"
