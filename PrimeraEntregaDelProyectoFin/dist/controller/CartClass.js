@@ -21,18 +21,22 @@ var CartClass = /** @class */ (function () {
         return cart;
     };
     CartClass.prototype.eliminarCart = function (id) {
-        var index = carritoUsuario_1.default.findIndex(function (element) { return element === id; });
-        var carritoEliminado = carritoUsuario_1.default.splice(index, 1);
-        return carritoEliminado;
+        var index = carritoUsuario_1.default.findIndex(function (element) { return element.id === id; });
+        return index;
     };
     CartClass.prototype.listarProductosDeCarrito = function (id) {
         var carritoEncontrado = carritoBuscado(id);
-        return carritoEncontrado.productos;
+        if (carritoEncontrado) {
+            return carritoEncontrado.productos;
+        }
+        else {
+            return false;
+        }
     };
     CartClass.prototype.añadirProductoACarrito = function (id, producto) {
         var carritoEncontrado = carritoBuscado(id);
         if (!carritoEncontrado) {
-            throw new Error("Carrito con el id: " + id + " no existe");
+            return false;
         }
         else {
             var productosDelCarrito = carritoEncontrado.productos;
@@ -41,6 +45,22 @@ var CartClass = /** @class */ (function () {
         }
     };
     CartClass.prototype.eliminarProductoDeUnCarrito = function (id, id_prod) {
+        var carritoEncontrado = carritoBuscado(id);
+        console.log(carritoEncontrado);
+        if (!carritoEncontrado) {
+            return false;
+        }
+        else {
+            var productoIndex = carritoEncontrado.productos.findIndex(function (element) { return element.id === id_prod; });
+            console.log(productoIndex);
+            if (productoIndex === -1) {
+                return false;
+            }
+            else {
+                carritoEncontrado.productos.splice(productoIndex, 1);
+                return carritoEncontrado;
+            }
+        }
     };
     return CartClass;
 }());

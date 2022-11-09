@@ -14,12 +14,14 @@ rutaProductos.get("/", function (req, res) {
 });
 rutaProductos.get("/:id", function (req, res) {
     if (config_1.default.administrador) {
-        if (req.params.id) {
-            var productoEncontrado = productClass.getAll(products_1.default, Number(req.params.id));
+        var productoEncontrado = productClass.getOne(products_1.default, Number(req.params.id));
+        if (productoEncontrado) {
             return res.json(productoEncontrado);
         }
         else {
-            throw new Error('No hay parametros :(');
+            return res.status(400).json({
+                message: 'Product Not Found'
+            });
         }
     }
     else {
@@ -32,7 +34,9 @@ rutaProductos.post("/", function (req, res) {
     if (config_1.default.administrador) {
         var _a = req.body, title = _a.title, price = _a.price, thumbnail = _a.thumbnail, descripcion = _a.descripcion, stock = _a.stock;
         if (!title || !price || !thumbnail || !descripcion || !stock) {
-            throw new Error("Campos Incompletos");
+            return res.status(400).json({
+                message: 'campos Not Found'
+            });
         }
         else {
             var newProduct = productClass.postNewProduct(products_1.default, title, price, thumbnail, descripcion, stock);
@@ -49,11 +53,20 @@ rutaProductos.put("/:id", function (req, res) {
     if (config_1.default.administrador) {
         var _a = req.body, title = _a.title, price = _a.price, thumbnail = _a.thumbnail, descripcion = _a.descripcion, stock = _a.stock;
         if (!title || !price || !thumbnail || !descripcion || !stock) {
-            throw new Error("Campos Incompletos");
+            return res.status(400).json({
+                message: 'Campos Incompletos'
+            });
         }
         else {
             var productoActualizado = productClass.putProduct(products_1.default, title, price, thumbnail, descripcion, stock, Number(req.params.id));
-            res.json(productoActualizado);
+            if (productoActualizado) {
+                res.json(productoActualizado);
+            }
+            else {
+                return res.status(400).json({
+                    message: 'Id Invalid'
+                });
+            }
         }
     }
     else {
@@ -65,8 +78,15 @@ rutaProductos.put("/:id", function (req, res) {
 rutaProductos.delete('/:id', function (req, res) {
     if (config_1.default.administrador) {
         var idBuscado = Number(req.params.id);
-        var productoBorrado = productClass.deleteProduct(products_1.default, idBuscado);
-        res.json(productoBorrado);
+        var index = productClass.deleteProduct(products_1.default, idBuscado);
+        if (index === -1) {
+            return res.status(400).json({
+                error: "Product Not Found"
+            });
+        }
+        else { }
+        var productoEliminado = products_1.default.splice(index, 1);
+        res.json(productoEliminado);
     }
     else {
         return res.status(401).json({

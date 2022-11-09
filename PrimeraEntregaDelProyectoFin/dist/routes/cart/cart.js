@@ -19,24 +19,38 @@ rutaCart.post("/", function (req, res) {
 });
 rutaCart.delete("/:id", function (req, res) {
     if (carritoUsuario_1.default.length === 0) {
-        throw new Error("No hay carritos");
+        return res.status(400).json({
+            message: 'Carrito Not Found'
+        });
     }
     else {
         var id = Number(req.params.id);
-        var carritoEliminado = carritoHerramientas.eliminarCart(id);
-        if (carritoEliminado) {
-            res.json({
-                Borrado: "Se a borrado el carrito con id: " + id
-            });
+        var index = carritoHerramientas.eliminarCart(id);
+        if (index !== -1) {
+            var carritoEliminado = carritoUsuario_1.default.splice(index, 1);
+            if (carritoEliminado) {
+                res.json({
+                    Borrado: "Se a borrado el carrito con id: " + id
+                });
+            }
+            else {
+                return res.status(400).json({
+                    message: 'Product Not Found to Delete'
+                });
+            }
         }
         else {
-            throw new Error("No se a borrado ningun producto");
+            return res.status(400).json({
+                message: 'Id Invalid'
+            });
         }
     }
 });
 rutaCart.get("/:id/productos", function (req, res) {
     if (carritoUsuario_1.default.length === 0) {
-        throw new Error("No hay carritos");
+        return res.status(400).json({
+            message: 'Cart Not Found'
+        });
     }
     else {
         var id = Number(req.params.id);
@@ -47,32 +61,55 @@ rutaCart.get("/:id/productos", function (req, res) {
             });
         }
         else {
-            throw new Error("No se a borrado ningun producto");
+            return res.status(400).json({
+                message: 'Cart Id Not Found'
+            });
         }
     }
 });
 rutaCart.post("/:id/productos", function (req, res) {
     if (carritoUsuario_1.default.length === 0) {
-        throw new Error("No hay carritos");
+        return res.status(400).json({
+            message: 'Cart Not Found'
+        });
     }
     else {
         var id = Number(req.params.id);
         var id_prod_1 = req.body.id_prod;
         var productoEncontrado = products_1.default.filter(function (element) { return element.id === id_prod_1; });
-        console.log(productoEncontrado);
-        if (productoEncontrado) {
+        if (productoEncontrado[0]) {
             var carritoActualizado = carritoHerramientas.añadirProductoACarrito(id, productoEncontrado[0]);
-            res.json({
-                carritoActualizado: carritoActualizado
-            });
+            if (carritoActualizado) {
+                res.json({
+                    carritoActualizado: carritoActualizado
+                });
+            }
+            else {
+                return res.status(400).json({
+                    message: 'Cart Id Not Found'
+                });
+            }
         }
         else {
-            throw new Error("No existe un producto con ese id");
+            return res.status(400).json({
+                message: 'Product Not Found to Read'
+            });
         }
     }
 });
 rutaCart.delete("/:id/productos/:id_prod", function (req, res) {
-    var id = req.params.id;
-    var id_productos = req.params.id_prod;
+    var id = Number(req.params.id);
+    var id_productos = Number(req.params.id_prod);
+    var carritoActualizado = carritoHerramientas.eliminarProductoDeUnCarrito(id, id_productos);
+    if (carritoActualizado) {
+        res.json({
+            carritoActualizado: carritoActualizado
+        });
+    }
+    else {
+        return res.status(400).json({
+            message: 'Product or Cart Not Found To Read'
+        });
+    }
 });
 exports.default = rutaCart;
