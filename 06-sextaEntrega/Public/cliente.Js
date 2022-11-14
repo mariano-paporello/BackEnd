@@ -28,6 +28,7 @@ form.addEventListener("submit", (ev) => {
 const divOfProducts = document.getElementById('listaDeProductos')
 const noProductos = document.getElementById("noProductos")
 
+
 socket.on("productosArray", data => {
     const newTr = document.createElement('tr')
     newTr.innerHTML = `
@@ -44,6 +45,7 @@ socket.on("productosArray", data => {
      <img class="image-table rounded" src=${data.thumbnail} alt=""> 
     </td>
    `;
+   console.log(newTr.innerHTML)
 
     divOfProducts.appendChild(newTr)
   if(noProductos.innerHTML){
@@ -79,7 +81,6 @@ userForm.addEventListener("submit", (ev)=>{
         // Mensajes Form
         const mensajesForm = document.getElementById('formForUsuarioName')
         const general = document.getElementById('fgen')
-        const mensajesDiv = document.getElementById('mensajesDiv')
         
         mensajesForm.addEventListener('submit', ev=>{
           ev.preventDefault()
@@ -107,7 +108,6 @@ userForm.addEventListener("submit", (ev)=>{
     socket.on('imprimirMensaje', data=>{
       const p = document.createElement('p')
        p.innerText=`${data.mensajeGeneral}`
-       console.log(data)
        mensajesDiv.appendChild(p)
    })
   }
