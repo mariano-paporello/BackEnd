@@ -1,9 +1,9 @@
 const io = require('socket.io')
 import moment from "moment"
-import productos from "../temp/products"
+import productsController from "../Controllers/productsController"
 import users from "../temp/users"
 import mensajes from "../temp/mensajes"
-import { mensaje } from "../../Public/types"
+import { mensaje, user } from "../../Public/types"
 
 const initWsServer = (server) => {
     const SocketServer = io(server)
@@ -14,18 +14,12 @@ const initWsServer = (server) => {
             Bienvenida: 'hola'
         })
         socket.on("enviarNuevoProducto", (data) => {
-            
-                const nuevoProducto = {
-                    id: productos.length !== 0 ? productos[productos.length - 1].id + 1 : 1,
-                    ...data
-                }
-                productos.push(nuevoProducto)
-        
-                SocketServer.emit("productosArray", nuevoProducto)
+            // RECIBE NUEVO PRODUCTO Y LO ENVIA A DB
+                SocketServer.emit("productosArray", productsController.newProduct(data))
             
         })
         socket.on('enviarNuevoUser', data=>{
-            const nuevoUser = {
+            const nuevoUser:user = {
                 id: socket.client.id,
                 ...data
             }

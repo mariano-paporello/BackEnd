@@ -7,8 +7,10 @@ export type producto = {
 export type mensaje = {
     mensajeGeneral : string
 }
-type user = {
-
+export type user = {
+    id: number
+    nombre: string
+    email: string
 }
 
 

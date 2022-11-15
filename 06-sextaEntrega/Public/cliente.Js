@@ -45,7 +45,7 @@ socket.on("productosArray", data => {
      <img class="image-table rounded" src=${data.thumbnail} alt=""> 
     </td>
    `;
-   console.log(newTr.innerHTML)
+
 
     divOfProducts.appendChild(newTr)
   if(noProductos.innerHTML){

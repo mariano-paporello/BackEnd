@@ -1,16 +1,18 @@
-const express = require('express')
-const http = require('http')
+import express from 'express'
+import http from 'http'
+import morgan from 'morgan'
 import { engine } from 'express-handlebars'
-import { Engine } from 'express-handlebars/types'
 import path from 'path'
-import productos from "../temp/products"
+import productsController from '../Controllers/productsController'
+import productos from '../temp/products'
 import mensajes from "../temp/mensajes"
 const app = express()
 
+app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.static('public'))
 
-console.log(productos)
+console.log(productsController.list())
 
 // HBS PART:
 const viewPath = path.resolve(__dirname, '../../views')
@@ -33,6 +35,6 @@ app.get('/', (req, res) => {
         mensajes
     })
 })
-const HTTPServer = http.Server(app);
+const HTTPServer = new http.Server(app);
 
 module.exports=HTTPServer
