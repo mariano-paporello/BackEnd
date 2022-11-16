@@ -1,10 +1,10 @@
 import { producto } from "../../Public/types"
-import { listProducts, createProduct } from "../db/db.products"
+import { getProductsMariaDB, createProductMariaDB } from "../db/mariaDb/db.products"
 class productsController{
 
    async list(){
     try{
-        const getAll = await listProducts
+        const getAll = await getProductsMariaDB()
         return getAll
     }catch(err){
         return console.log({
@@ -13,16 +13,21 @@ class productsController{
     }}
 
 
-   async newProduct(data){
-        const productos = await listProducts
+   async newProduct(data){try{
+    const productos = await getProductsMariaDB()
         const nuevoProducto : producto = {
             id: productos.length !== 0 ? productos[productos.length - 1].id + 1 : 1,
             ...data
         }
-        createProduct(nuevoProducto)
-
+        createProductMariaDB(nuevoProducto)
         return nuevoProducto
+   }catch(err){
+    throw new Error(err)
+   }
+        
+
+        
     }
 }
 
-export default  new productsController()
+export default  productsController

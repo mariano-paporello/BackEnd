@@ -4,15 +4,19 @@ import morgan from 'morgan'
 import { engine } from 'express-handlebars'
 import path from 'path'
 import productsController from '../Controllers/productsController'
-import productos from '../temp/products'
-import mensajes from "../temp/mensajes"
+import mensajeController from '../Controllers/mensajesController'
+
+
 const app = express()
 
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.static('public'))
 
-console.log(productsController.list())
+const prodController = new productsController()
+const mjController = new mensajeController()
+
+
 
 // HBS PART:
 const viewPath = path.resolve(__dirname, '../../views')
@@ -29,10 +33,10 @@ app.engine('hbs', engine({
     defaultLayout: defaultLayoutPath
 }))
 
-app.get('/', (req, res) => {
+app.get('/', async(req, res) => {
     res.render('main', {
-        productos,
-        mensajes
+        productos: await prodController.list(),
+        mensajes: await mjController.list()
     })
 })
 const HTTPServer = new http.Server(app);
