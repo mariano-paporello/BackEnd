@@ -1,0 +1,56 @@
+Comando para usar la db ecommerce:
+use ecommerce
+
+Comando para crear coleccion:
+--->db.createCollection("productos")
+
+--->db.createCollection("mensajes")
+
+Comando para insertar los documentos:
+Para productos:
+--->db.productos.insertMany(copy paste el productos.json)
+Para mensajes:
+--->db.mensajes,insertMany(copy paste el mensajes.json)
+
+Comando para listar los documentos:
+En productos:
+--->db.productos.find({})
+En mensajes:
+--->db.mensajes.find({})
+
+Comando para mostrar la cantidad de documentos:
+En productos:
+--->db.productos.estimatedDocumentCount() 
+En mensajes:
+--->db.mensajes.estimatedDocumentCount()
+
+Comando para agregar un doc a la coleccion productos:
+--->db.productos.insert({
+  "title": "desodrante de tinelli",
+  "precio": 1260,
+  "thumbnail": "NOT_FOUND"
+})
+
+Comando para listar productos con menos de 1000 de precio:
+--->db.productos.find({precio:{$lt:1000}})
+
+Comando para listar productos con mas de 3000 de precio:
+--->db.productos.find({precio:{$gt:3000}})
+
+Comando para listar producto entre 1000 y 3000 de precio:
+--->db.productos.find({$and:[{precio:{$gte:1000}},{precio:{$lte:3000}}]})
+
+Comando para listar el tercer producto con mas bajo precio:
+
+
+Comando para añadir a todos los doc el stock de 100:
+--->db.productos.updateMany({},{$set: {"stock": 100}})
+
+Comando para actualizar el stock de los precios mayores a 4000:
+--->db.productos.updateMany({precio:{$gt: 4000}},{$set: {"stock": 0}})
+
+Comando para borrar los productos con precio menor a 1000:
+--->db.productos.deleteMany({precio:{$lt:1000}})
+
+Comando para crear el user pepe: 
+--->db.createUser({user:"pepe", pwd: "asd456", roles: [ {role: "read", db: "ecommerce"}]})
