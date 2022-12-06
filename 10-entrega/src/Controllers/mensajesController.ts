@@ -1,12 +1,12 @@
 import { mensaje } from "../../Public/types"
-import { createMensajeSqLite3, getmensajesSqLite3 } from "../db/sqlite/db.mensajes"
+import menssagesMetodos from "../models/messages"
 import moment from "moment"
 
 class mensajeController{
 
     async list(){
      try{
-         const getAll = await getmensajesSqLite3()
+         const getAll = await menssagesMetodos.find({})
          return getAll
      }catch(err){
          return console.log({
@@ -17,17 +17,21 @@ class mensajeController{
  
     async newProduct(data){
         try{
-            const dataCompleta: mensaje = {
-                mensajeGeneral: `${data.nombre} ${data.email}: ${data.mensajeGeneral}  [${moment().format('h:mmA')}(${moment().format('L')})]`,
+            const dataCompleta = {
+                author:{
+                    nombre: data.nombre,
+                    apellido: data.apellido,
+                    edad: data.edad,
+                    alias: data.alias,
+                    avatar: data.avatar,
+                    },
+                text: data.mensajeGeneral ,
             }
-            createMensajeSqLite3(dataCompleta)
+            await menssagesMetodos.create(dataCompleta)
             return dataCompleta
         }catch(err){
             throw new Error(err)
-        }
-         
- 
-         
+        }  
      }
  }
  

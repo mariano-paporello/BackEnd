@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,13 +35,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
+Object.defineProperty(exports, "__esModule", { value: true });
 var server = require('./services/server');
 var initWsServer = require("./services/sockets");
+var db_products_1 = require("./db/mariaDb/db.products");
+var db_mensajes_1 = require("./db/sqlite/db.mensajes");
 var port = 8080;
-var init = function () { return __awaiter(_this, void 0, void 0, function () {
+var init = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         initWsServer(server);
+        db_products_1.createTableMariaDB();
+        db_mensajes_1.createTableSqLite3();
         server.listen(port, function () {
             console.log("Server is up in " + port);
         });

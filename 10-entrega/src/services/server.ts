@@ -2,13 +2,14 @@ import express from 'express'
 import http from 'http'
 import morgan from 'morgan'
 import { engine } from 'express-handlebars'
+import rutaTest from "../routes/index"
 import path from 'path'
 import productsController from '../Controllers/productsController'
 import mensajeController from '../Controllers/mensajesController'
 
 
 const app = express()
-
+app.use("/api",rutaTest)
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.static('public'))
@@ -33,10 +34,13 @@ app.engine('hbs', engine({
     defaultLayout: defaultLayoutPath
 }))
 
-app.get('/', async(req, res) => {
+
+app.get('/',async (req, res) => {
+    const productos = await prodController.list()
+    const mensajes = await mjController.list()
     res.render('main', {
-        productos: await prodController.list(),
-        mensajes: await mjController.list()
+        productos: productos,
+        mensajes: mensajes
     })
 })
 const HTTPServer = new http.Server(app);

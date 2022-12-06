@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -46,54 +35,55 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var db_products_1 = require("../db/mariaDb/db.products");
-var productsController = /** @class */ (function () {
-    function productsController() {
-    }
-    productsController.prototype.list = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var getAll, err_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, db_products_1.getProductsMariaDB()];
-                    case 1:
-                        getAll = _a.sent();
-                        return [2 /*return*/, getAll];
-                    case 2:
-                        err_1 = _a.sent();
-                        return [2 /*return*/, console.log({
-                                Error: true,
-                                theError: err_1
-                            })];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    productsController.prototype.newProduct = function (data) {
-        return __awaiter(this, void 0, void 0, function () {
-            var productos, nuevoProducto, err_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, db_products_1.getProductsMariaDB()];
-                    case 1:
-                        productos = _a.sent();
-                        nuevoProducto = __assign({ id: productos.length !== 0 ? productos[productos.length - 1].id + 1 : 1 }, data);
-                        db_products_1.createProductMariaDB(nuevoProducto);
-                        return [2 /*return*/, nuevoProducto];
-                    case 2:
-                        err_2 = _a.sent();
-                        throw new Error(err_2);
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    return productsController;
-}());
-exports.default = productsController;
+exports.createMensajeSqLite3 = exports.getmensajesSqLite3 = exports.getmensajeSqLite3 = exports.createTableSqLite3 = void 0;
+var sqlLite_1 = __importDefault(require("./sqlLite"));
+var createTableSqLite3 = function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, sqlLite_1.default.schema.dropTableIfExists('mensajes')];
+            case 1:
+                _a.sent();
+                return [4 /*yield*/, sqlLite_1.default.schema.createTable('mensajes', function (table) {
+                        table.increments('id').primary;
+                        table.string('mensajeGeneral').notNullable;
+                    }).then(function () {
+                        console.log('se creo la tabla mensajes');
+                    })];
+            case 2:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.createTableSqLite3 = createTableSqLite3;
+var getmensajeSqLite3 = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, sqlLite_1.default('mensajes').where("id", id)];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
+exports.getmensajeSqLite3 = getmensajeSqLite3;
+var getmensajesSqLite3 = function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, sqlLite_1.default('mensajes').select('*')];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
+exports.getmensajesSqLite3 = getmensajesSqLite3;
+var createMensajeSqLite3 = function (obj) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, sqlLite_1.default('mensajes').insert(obj)];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
+exports.createMensajeSqLite3 = createMensajeSqLite3;
