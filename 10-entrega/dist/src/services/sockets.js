@@ -52,7 +52,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var io = require('socket.io');
 var productsController_1 = __importDefault(require("../Controllers/productsController"));
-var users_1 = __importDefault(require("../temp/users"));
 var mensajesController_1 = __importDefault(require("../Controllers/mensajesController"));
 var initWsServer = function (server) {
     var SocketServer = io(server);
@@ -77,7 +76,7 @@ var initWsServer = function (server) {
         }); });
         socket.on('enviarNuevoUser', function (data) {
             var nuevoUser = __assign({ id: socket.client.id }, data);
-            users_1.default.push(nuevoUser);
+            // users.push(nuevoUser)
             socket.emit("UsuarioConfirmadoYGuardado", nuevoUser);
         });
         socket.on('enviarMensaje', function (data) { return __awaiter(void 0, void 0, void 0, function () {
@@ -85,7 +84,6 @@ var initWsServer = function (server) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log(users_1.default);
                         mjClass = new mensajesController_1.default();
                         return [4 /*yield*/, mjClass.newProduct(data)];
                     case 1:

@@ -45,10 +45,11 @@ var morgan_1 = __importDefault(require("morgan"));
 var express_handlebars_1 = require("express-handlebars");
 var index_1 = __importDefault(require("../routes/index"));
 var path_1 = __importDefault(require("path"));
+var products_1 = __importDefault(require("../models/products"));
 var productsController_1 = __importDefault(require("../Controllers/productsController"));
 var mensajesController_1 = __importDefault(require("../Controllers/mensajesController"));
+var messages_1 = __importDefault(require("../models/messages"));
 var app = express_1.default();
-app.use("/api", index_1.default);
 app.use(morgan_1.default('dev'));
 app.use(express_1.default.json());
 app.use(express_1.default.static('public'));
@@ -68,24 +69,18 @@ app.engine('hbs', express_handlebars_1.engine({
     defaultLayout: defaultLayoutPath
 }));
 app.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, _b, _c;
-    var _d;
-    return __generator(this, function (_e) {
-        switch (_e.label) {
-            case 0:
-                _b = (_a = res).render;
-                _c = ['main'];
-                _d = {};
-                return [4 /*yield*/, prodController.list()];
-            case 1:
-                _d.productos = _e.sent();
-                return [4 /*yield*/, mjController.list()];
-            case 2:
-                _b.apply(_a, _c.concat([(_d.mensajes = _e.sent(),
-                        _d)]));
-                return [2 /*return*/];
-        }
+    return __generator(this, function (_a) {
+        products_1.default.find({}).then(function (productos) {
+            messages_1.default.find({}).then(function (mensajes) {
+                res.render('main', {
+                    productos: productos.map(function (productoIndv) { return productoIndv.toJSON(); }),
+                    mensajes: mensajes.map(function (mensajeIndv) { return mensajeIndv.toJSON(); })
+                });
+            });
+        });
+        return [2 /*return*/];
     });
 }); });
+app.use("/api", index_1.default);
 var HTTPServer = new http_1.default.Server(app);
 module.exports = HTTPServer;

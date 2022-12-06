@@ -39,8 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var db_mensajes_1 = require("../db/sqlite/db.mensajes");
-var moment_1 = __importDefault(require("moment"));
+var messages_1 = __importDefault(require("../models/messages"));
 var mensajeController = /** @class */ (function () {
     function mensajeController() {
     }
@@ -51,7 +50,7 @@ var mensajeController = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, db_mensajes_1.getmensajesSqLite3()];
+                        return [4 /*yield*/, messages_1.default.find({})];
                     case 1:
                         getAll = _a.sent();
                         return [2 /*return*/, getAll];
@@ -68,19 +67,30 @@ var mensajeController = /** @class */ (function () {
     };
     mensajeController.prototype.newProduct = function (data) {
         return __awaiter(this, void 0, void 0, function () {
-            var dataCompleta;
+            var dataCompleta, err_2;
             return __generator(this, function (_a) {
-                try {
-                    dataCompleta = {
-                        mensajeGeneral: data.nombre + " " + data.email + ": " + data.mensajeGeneral + "  [" + moment_1.default().format('h:mmA') + "(" + moment_1.default().format('L') + ")]",
-                    };
-                    db_mensajes_1.createMensajeSqLite3(dataCompleta);
-                    return [2 /*return*/, dataCompleta];
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        dataCompleta = {
+                            author: {
+                                nombre: data.nombre,
+                                apellido: data.apellido,
+                                edad: data.edad,
+                                alias: data.alias,
+                                avatar: data.avatar,
+                            },
+                            text: data.mensajeGeneral,
+                        };
+                        return [4 /*yield*/, messages_1.default.create(dataCompleta)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, dataCompleta];
+                    case 2:
+                        err_2 = _a.sent();
+                        throw new Error(err_2);
+                    case 3: return [2 /*return*/];
                 }
-                catch (err) {
-                    throw new Error(err);
-                }
-                return [2 /*return*/];
             });
         });
     };

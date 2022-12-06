@@ -46,8 +46,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var db_products_1 = require("../db/mariaDb/db.products");
+var products_1 = __importDefault(require("../models/products"));
 var productsController = /** @class */ (function () {
     function productsController() {
     }
@@ -58,9 +61,10 @@ var productsController = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, db_products_1.getProductsMariaDB()];
+                        return [4 /*yield*/, products_1.default.find({})];
                     case 1:
                         getAll = _a.sent();
+                        console.log(getAll);
                         return [2 /*return*/, getAll];
                     case 2:
                         err_1 = _a.sent();
@@ -75,17 +79,17 @@ var productsController = /** @class */ (function () {
     };
     productsController.prototype.newProduct = function (data) {
         return __awaiter(this, void 0, void 0, function () {
-            var productos, nuevoProducto, err_2;
+            var nuevoProducto, res, err_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, db_products_1.getProductsMariaDB()];
+                        nuevoProducto = __assign({}, data);
+                        return [4 /*yield*/, products_1.default.create(nuevoProducto)];
                     case 1:
-                        productos = _a.sent();
-                        nuevoProducto = __assign({ id: productos.length !== 0 ? productos[productos.length - 1].id + 1 : 1 }, data);
-                        db_products_1.createProductMariaDB(nuevoProducto);
-                        return [2 /*return*/, nuevoProducto];
+                        res = _a.sent();
+                        console.log(res);
+                        return [2 /*return*/, res];
                     case 2:
                         err_2 = _a.sent();
                         throw new Error(err_2);
