@@ -7,7 +7,7 @@
     <h4> Mensajes:</h4>
     {{#if mensajes}}
       {{#each mensajes}}
-      <p>{{this.mensajeGeneral}} </p>
+      <p><img src="{{this.author.avatar}}" width="30px" alt="">{{this.author.alias}} "{{this.author.nombre}}": {{this.text}} </p>
       {{/each}}
     {{/if}}
   </div>

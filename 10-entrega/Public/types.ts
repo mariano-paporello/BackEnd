@@ -4,13 +4,15 @@ export type producto = {
     thumbnail: string
 }
 export type mensaje = {
-    mensajeGeneral : string
-}
-export type user = {
-    id: number
+    author: {id: string
     nombre: string
-    email: string
+    apellido: string
+    edad: number
+    alias: string
+    avatar: string},
+    text: string
 }
+
 
 
 

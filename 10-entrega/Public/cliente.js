@@ -55,19 +55,25 @@ socket.on("productosArray", data => {
 
 // Users Form
 const nombreUser = document.getElementById('nombreUser')
-const gmailUser = document.getElementById('gmailUser')
+const apellidoUser = document.getElementById('apellidoUser')
+const edadUser = document.getElementById('edadUser')
+const aliasUser = document.getElementById('aliasUser')
+const avatarUser = document.getElementById('avatarUser')
 const userForm = document.getElementById('userForm')
 
 
 
 userForm.addEventListener("submit", (ev)=>{
   ev.preventDefault()
-  if(!nombreUser.value || !gmailUser.value) {
+  if(!nombreUser.value || !apellidoUser.value || !edadUser.value || !aliasUser.value || !avatarUser.value) {
     throw new Error("Campos incompletos , media pila :|")
   }else{
     const nuevoUser = {
       nombre: nombreUser.value,
-      email: gmailUser.value
+      apellido: apellidoUser.value,
+      edad: Number(edadUser.value),
+      alias: aliasUser.value,
+      avatar: avatarUser.value
     }
     socket.emit('enviarNuevoUser', nuevoUser)
     socket.on('UsuarioConfirmadoYGuardado', data=>{
@@ -88,16 +94,12 @@ userForm.addEventListener("submit", (ev)=>{
               throw new Error('Campos Incompletos')
           }
           const mensajeGeneral = {
-             ...data,
-              mensajeGeneral: general.value
+            author: {...data},
+              text: general.value
           }
 
           socket.emit('enviarMensaje', mensajeGeneral)
           general.value = ''
-
-
-          
-
       })
       }
       else{
@@ -107,7 +109,7 @@ userForm.addEventListener("submit", (ev)=>{
     })
     socket.on('imprimirMensaje', data=>{
       const p = document.createElement('p')
-       p.innerText=`${data.mensajeGeneral}`
+       p.innerHTML=`<img width=30px src=${data.author.avatar}>${data.author.alias}: ${data.text}`
        mensajesDiv.appendChild(p)
    })
   }

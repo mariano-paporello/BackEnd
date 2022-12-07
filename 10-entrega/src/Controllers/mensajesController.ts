@@ -1,6 +1,6 @@
 import { mensaje } from "../../Public/types"
 import menssagesMetodos from "../models/messages"
-import moment from "moment"
+import menssagesModel from "../models/messages"
 
 class mensajeController{
 
@@ -15,20 +15,21 @@ class mensajeController{
      }}
  
  
-    async newProduct(data){
+    async nuevomensaje(data){
         try{
-            const dataCompleta = {
+            const dataCompleta: mensaje = {
                 author:{
-                    nombre: data.nombre,
-                    apellido: data.apellido,
-                    edad: data.edad,
-                    alias: data.alias,
-                    avatar: data.avatar,
+                    id: data.id,
+                    nombre: data.author.nombre,
+                    apellido: data.author.apellido,
+                    edad: Number(data.author.edad),
+                    alias: data.author.alias,
+                    avatar: data.author.avatar,
                     },
-                text: data.mensajeGeneral ,
+                text: data.text ,
             }
-            await menssagesMetodos.create(dataCompleta)
-            return dataCompleta
+           const res=  await menssagesModel.create(dataCompleta)
+            return res
         }catch(err){
             throw new Error(err)
         }  

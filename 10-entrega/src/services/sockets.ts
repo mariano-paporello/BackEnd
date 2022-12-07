@@ -21,14 +21,12 @@ const initWsServer =  (server) =>  {
                 id: socket.client.id,
                 ...data
             }
-            // users.push(nuevoUser)
             socket.emit("UsuarioConfirmadoYGuardado", nuevoUser)
         })
         socket.on('enviarMensaje', async(data)=>{
-            
             const mjClass = new mjController()
-            const dataCompleta = await mjClass.newProduct(data)
-            SocketServer.emit('imprimirMensaje', dataCompleta)
+            const dataSi = await mjClass.nuevomensaje(data)
+            SocketServer.emit('imprimirMensaje', dataSi)
         })
     })
     return SocketServer
