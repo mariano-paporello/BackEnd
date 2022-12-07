@@ -1,0 +1,15 @@
+
+<form id='formForUsuarioName' action="">
+  <label for="fgen">Mensaje general</label><br>
+  <input type="text" id="fgen" name="fgen" value="Hola">
+  <input type="submit" value="Enviar">
+  <div id="mensajesDiv">
+    <h4> Mensajes:</h4>
+    {{#if mensajes}}
+      {{#each mensajes}}
+      <p><img src="{{this.author.avatar}}" width="30px" alt="">{{this.author.alias}} "{{this.author.nombre}}": {{this.text}} </p>
+      {{/each}}
+    {{/if}}
+  </div>
+</form> 
+
