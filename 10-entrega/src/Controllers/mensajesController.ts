@@ -35,5 +35,5 @@ class mensajeController{
         }  
      }
  }
- 
- export default  mensajeController
+ const menssageController = new mensajeController()
+ export default menssageController

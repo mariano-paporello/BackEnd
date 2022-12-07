@@ -24,8 +24,7 @@ const initWsServer =  (server) =>  {
             socket.emit("UsuarioConfirmadoYGuardado", nuevoUser)
         })
         socket.on('enviarMensaje', async(data)=>{
-            const mjClass = new mjController()
-            const dataSi = await mjClass.nuevomensaje(data)
+            const dataSi = await mjController.nuevomensaje(data)
             SocketServer.emit('imprimirMensaje', dataSi)
         })
     })

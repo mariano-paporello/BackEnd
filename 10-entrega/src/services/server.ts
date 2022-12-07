@@ -16,8 +16,6 @@ app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.static('public'))
 
-const prodController = new productsController()
-const mjController = new mensajeController()
 
 
 
