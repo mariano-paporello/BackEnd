@@ -4,6 +4,32 @@ socket.on('bienvenidaAUsuario', (data) => {
     console.log("Bienvenido Usuario")
 })
 
+// UserLog Form
+const formLogin = document.getElementById("formLogIn")
+const userLoginName = document.getElementById("userLoginName")
+const divLogeo = document.getElementById('divFormLogin')
+const containerDiv = document.getElementById("divLogin")
+
+
+// formLogin.addEventListener("submit", (ev)=>{
+//   ev.preventDefault()
+//   if(!userLoginName.value){
+//     throw new Error("El campo esta incopleto")
+//   }else{
+//     divLogeo.classList.add('esconder') 
+//     socket.emit("enviarUserLoginName", userLoginName.value)
+//     socket.on("userSaved", async data=>{
+//       const BienvenidaDiv = document.createElement("div")
+//       BienvenidaDiv.innerHTML= `<h2> Bienvenido ${ await data}</h2> <button class="bg-warning text-light" type="submit">Logout</button`
+//       containerDiv.appendChild(BienvenidaDiv)
+//     })
+//   }
+// })
+
+
+
+
+
 // Products Form
 const form = document.getElementById("productsForm")
 const title = document.getElementById("titulo")
@@ -66,6 +92,8 @@ const userForm = document.getElementById('userForm')
 userForm.addEventListener("submit", (ev)=>{
   ev.preventDefault()
   if(!nombreUser.value || !apellidoUser.value || !edadUser.value || !aliasUser.value || !avatarUser.value) {
+    console.log(nombreUser.value, apellidoUser.value, edadUser.value, aliasUser.value, avatarUser.value)
+  
     throw new Error("Campos incompletos , media pila :|")
   }else{
     const nuevoUser = {

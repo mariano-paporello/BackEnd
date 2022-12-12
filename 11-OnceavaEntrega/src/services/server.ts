@@ -5,17 +5,17 @@ import { engine } from 'express-handlebars'
 import rutaTest from "../routes/index"
 import path from 'path'
 import ProductoModel from '../models/products'
-import productsController from '../Controllers/productsController'
-import mensajeController from '../Controllers/mensajesController'
 import menssagesModel from '../models/messages'
-import { crear5Productos } from '../Controllers/testController'
+import CookieParser from "cookie-parser"
+import session from "express-session"
+
 
 
 const app = express()
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.static('public'))
-
+app.use(CookieParser())
 
 
 
@@ -36,14 +36,21 @@ app.engine('hbs', engine({
 
 
 app.get('/', async (req, res) => {
-    ProductoModel.find({}).then(productos => {
-        menssagesModel.find({}).then(mensajes => {
-            res.render('main', {
-                productos: productos.map(productoIndv => productoIndv.toJSON()),
-                mensajes: mensajes.map(mensajeIndv => mensajeIndv.toJSON())
+    if(req.cookies.userName){
+        ProductoModel.find({}).then(productos => {
+            menssagesModel.find({}).then(mensajes => {
+                res.render('main', {
+                    productos: productos.map(productoIndv => productoIndv.toJSON()),
+                    mensajes: mensajes.map(mensajeIndv => mensajeIndv.toJSON()),
+                    user: req.cookies.userName
+                })
             })
         })
-    })
+    }
+    else{
+        res.redirect("/api/login")
+    }
+    
 })
 
 app.use("/api",rutaTest)

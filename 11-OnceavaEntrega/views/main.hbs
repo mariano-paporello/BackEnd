@@ -1,16 +1,13 @@
 <div class="container-fluid d-flex justify-content-center importantDiv">
-    <div class=" bg-secondary p-3 mb-3 rounded flex-colum">
-        <h2>Login de Usuario </h2>
-        <p>popo</p>
-    </div>
+
+    {{> bienvenida}}
+    {{!-- Lo que puedo hacer es que el login pase los datos al front y de ahí crear el cartel de bienvenida con los datos que traemos.
+    Despues lo que quedaría sería simplemente hacer que ese cartel tenga el boton con en evento que haga el logout --}}
+
     <div class=" bg-secondary p-3 mb-3 rounded">
         <h1>Añadir Productos Formulario</h1>
         <br />
         {{> form}}
-        <div>
-
-
-        </div>
 
 
     </div>

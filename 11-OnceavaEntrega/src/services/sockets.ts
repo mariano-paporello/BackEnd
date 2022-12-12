@@ -27,6 +27,9 @@ const initWsServer =  (server) =>  {
             const dataSi = await mjController.nuevomensaje(data)
             SocketServer.emit('imprimirMensaje', dataSi)
         })
+        socket.on("enviarUserLoginName",  (data)=>{
+            socket.emit("userSaved", data)
+        })
     })
     return SocketServer
 }  
