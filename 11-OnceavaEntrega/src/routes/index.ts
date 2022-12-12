@@ -7,13 +7,14 @@ const rutaPrincipal: Router = Router();
 rutaPrincipal.get('/login', (req, res) => {
     res.render("Login")
 })
-rutaPrincipal.get("/Logout", (req, res)=>{
+rutaPrincipal.get("/logout", (req, res)=>{
     res.render("Logout")
 })
 rutaPrincipal.post('/login', (req, res) => {
-    console.log(req.body)
-    const username = req.body.nombre
-    res.cookie("userName", username)
+    console.log(req.params, req.body, req.query)
+    // const {userName} = req.body
+    // console.log(userName)
+    // res.cookie("userName", userName)
     res.redirect("/")
 })
 rutaPrincipal.get("/normalize", async(req, res)=>{
