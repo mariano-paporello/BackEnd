@@ -7,37 +7,45 @@ import ProductoModel from '../models/products'
 import menssagesModel from '../models/messages'
 import cookieParser from "cookie-parser"
 import session from 'express-session';
+import MongoStore from 'connect-mongo'
+import config from '../config/index'
 
 declare module 'express-session' {
     interface SessionData {
-      nombre: String;
-      contador: Number;
+      nombre:String,
+      contador:Number
     }
   }
-  
 
 
 const app = express()
 app.use("/api",rutaTest)
 // Session Part:
-let logged = { islogged: false, isTimedOut: false, isDestroyed: false, nombre: '' }
+let logged = { islogged: false, isDestroyed: false, nombre: '' }
 const unSegundo = 1000;
 const unMinuto = unSegundo * 60;
 const unaHora = unMinuto * 60;
 const unDia = unaHora * 24;
+const storeOptions= {
+    store: MongoStore.create({
+        mongoUrl: config.MONGO_ATLAS_URL,
+        crypto: {
+            secret: "1234"
+        }
+        }),
+        secret: 'SuperSecreto',
+        resave: false,
+        saveUninitialized: false,
+        rolling: true,
+        cookie: { maxAge: unMinuto }
+          
+        
+}
 app.use(cookieParser());
-app.use(
-  session({
-    secret: 'SuperSecreto',
-    resave: false,
-    saveUninitialized: false,
-    rolling: true,
-    cookie: { maxAge: unMinuto }
-  })
-);
+app.use(session(storeOptions));
 
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true })); 
 app.use(express.static('public'))
 
 
@@ -59,8 +67,7 @@ app.engine('hbs', engine({
 
 
 app.get('/', async (req, res) => {
-    if(req.session.nombre!=""&&req.session.nombre&&logged.islogged){
-        console.log(req.cookies.userName)
+    if(req.session.nombre&&logged.islogged&&logged.isDestroyed===false){
         ProductoModel.find({}).then(productos => {
             menssagesModel.find({}).then(mensajes => {
                 res.render('main', {
@@ -75,28 +82,12 @@ app.get('/', async (req, res) => {
         res.redirect("/login")
     }
 })
-app.get('/login', (req, res) => {
-    res.render("Login")
-})
-app.get("/logout", (req, res)=>{
-    if(req.session){
-    res.render("Logout", {
-        user: req.session.nombre
-    })
-    req.session.destroy;
-    console.log(req.session)
-    }
-    else{
-        res.redirect("/")
-    }
-})
 app.post('/login', (req, res) => {
     const {userName} = req.body
-    if(userName|| userName== ""){
-        req.session.nombre =  userName
+    if(userName){
+    req.session.nombre =  userName
     logged.nombre= userName
     logged.islogged= true
-    console.log(req.session)
     res.redirect("/")
     }
     else{
@@ -104,6 +95,30 @@ app.post('/login', (req, res) => {
     }
     
 })
+app.get('/login', (req, res) => {
+    logged.isDestroyed=false
+    res.render("Login")
+})
+app.get("/logout", (req, res)=>{
+    if(req.session.nombre){
+    res.render("Logout", {
+        user: req.session.nombre
+    })
+    logged.islogged= false
+    logged.nombre=""
+    logged.isDestroyed= true
+    setTimeout(()=>{
+        req.session.destroy((err)=>{
+            console.error(err)
+           });
+    },unMinuto)
+    
+    }
+    else{
+        res.redirect("/")
+    }
+})
+
 
 
 
