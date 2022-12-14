@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const connectionString = "mongodb+srv://mariano:12345@freecluster.eclcymm.mongodb.net/?retryWrites=true&w=majority";
+const connectionString = "mongodb+srv://mariano:zRzWPTFXf3MKeZvf@freecluster.eclcymm.mongodb.net/?retryWrites=true&w=majority";
 
 const initMongoDB = async () => {
   try {
