@@ -14,6 +14,7 @@ declare module 'express-session' {
     interface SessionData {
       nombre:String,
       contador:Number
+      contraseña:any
     }
   }
 
@@ -21,7 +22,7 @@ declare module 'express-session' {
 const app = express()
 app.use("/api",rutaTest)
 // Session Part:
-let logged = { islogged: false, isDestroyed: false, nombre: '' }
+let logged = { islogged: false, isDestroyed: false, nombre: '', contraseña: false }
 const unSegundo = 1000;
 const unMinuto = unSegundo * 60;
 const unaHora = unMinuto * 60;
@@ -83,22 +84,45 @@ app.get('/', async (req, res) => {
     }
 })
 app.post('/login', (req, res) => {
-    const {userName} = req.body
-    if(userName){
+    const {userName, contraseña} = req.body
+    if(userName&&contraseña){
+        // if(contraseñaExiste&&usuarioexiste&&contraseñaYUsuariosCompatibles){
+        // Hago lo que tengo que hacer para poder mostrar todo el contenido a este usuario
+        // }
     req.session.nombre =  userName
+    req.session.contraseña= contraseña
     logged.nombre= userName
+    logged.contraseña=true
     logged.islogged= true
     res.redirect("/")
     }
-    else{
-        throw new Error('Completar ')
+    else {
+        if(!userName){
+        throw new Error('Ingresar usuario para acceder')
+        }
+        if(!contraseña){
+            throw new Error('Ingresar contraseña de usuario para acceder')
+        }
     }
     
 })
+app.post('/register', (req, res)=>{
+    const {userName, contraseña}= req.body
+    res.json({
+        msg: userName + contraseña
+    })
+})
+
 app.get('/login', (req, res) => {
     logged.isDestroyed=false
     res.render("Login")
 })
+
+app.get('/register',(req,res)=>{
+     res.render("register")
+})
+
+
 app.get("/logout", (req, res)=>{
     if(req.session.nombre){
     res.render("Logout", {

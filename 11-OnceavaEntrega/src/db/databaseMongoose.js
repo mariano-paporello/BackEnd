@@ -10,7 +10,7 @@ const initMongoDB = async () => {
       useUnifiedTopology: true,
     });
 
-    console.log('YA ESTOY CONECTADO');
+    console.log('YA ESTOY CONECTADO')
   } catch (error) {
     console.log(`ERROR => ${error}`);
     return error;
