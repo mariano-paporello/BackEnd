@@ -9,6 +9,8 @@ import cookieParser from "cookie-parser"
 import session from 'express-session';
 import MongoStore from 'connect-mongo'
 import config from '../config/index'
+import passport from "passport"
+import { loginFunc, signUpFunc } from './auth'
 
 declare module 'express-session' {
     interface SessionData {
@@ -44,11 +46,16 @@ const storeOptions= {
 }
 app.use(cookieParser());
 app.use(session(storeOptions));
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true })); 
 app.use(express.static('public'))
 
+
+passport.use('logIn', loginFunc);
+passport.use('signUp', signUpFunc);
 
 
 // HBS PART:
@@ -89,6 +96,7 @@ app.post('/login', (req, res) => {
         // if(contraseñaExiste&&usuarioexiste&&contraseñaYUsuariosCompatibles){
         // Hago lo que tengo que hacer para poder mostrar todo el contenido a este usuario
         // }
+    
     req.session.nombre =  userName
     req.session.contraseña= contraseña
     logged.nombre= userName
@@ -108,9 +116,9 @@ app.post('/login', (req, res) => {
 })
 app.post('/register', (req, res)=>{
     const {userName, contraseña}= req.body
-    res.json({
-        msg: userName + contraseña
-    })
+    req.session.nombre= userName
+    req.session.contraseña= contraseña
+    res.redirect("/")
 })
 
 app.get('/login', (req, res) => {

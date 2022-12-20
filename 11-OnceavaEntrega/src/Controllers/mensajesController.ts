@@ -1,6 +1,5 @@
 import { mensaje } from "../../Public/types"
 import menssagesMetodos from "../models/messages"
-import menssagesModel from "../models/messages"
 
 class mensajeController{
 
@@ -28,7 +27,7 @@ class mensajeController{
                     },
                 text: data.text ,
             }
-           const res=  await menssagesModel.create(dataCompleta)
+           const res=  await menssagesMetodos.create(dataCompleta)
             return res
         }catch(err){
             throw new Error(err)
