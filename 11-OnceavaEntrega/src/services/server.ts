@@ -9,11 +9,14 @@ import cookieParser from "cookie-parser"
 import session from 'express-session';
 import MongoStore from 'connect-mongo'
 import config from '../config/index'
+import passport from "passport"
+import { loginFunc, signUpFunc } from './auth'
 
 declare module 'express-session' {
     interface SessionData {
       nombre:String,
       contador:Number
+      contraseña:any
     }
   }
 
@@ -21,7 +24,8 @@ declare module 'express-session' {
 const app = express()
 app.use("/api",rutaTest)
 // Session Part:
-let logged = { islogged: false, isDestroyed: false, nombre: '' }
+export const logged = { islogged: false, isDestroyed: false, nombre: '', contraseña: false }
+
 const unSegundo = 1000;
 const unMinuto = unSegundo * 60;
 const unaHora = unMinuto * 60;
@@ -41,14 +45,18 @@ const storeOptions= {
           
         
 }
-app.use(cookieParser());
-app.use(session(storeOptions));
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true })); 
 app.use(express.static('public'))
 
+app.use(cookieParser());
+app.use(session(storeOptions));
+app.use(passport.initialize())
+app.use(passport.session())
 
+passport.use('login', loginFunc);
+passport.use('signup', signUpFunc);
 
 // HBS PART:
 const viewPath = path.resolve(__dirname, '../../views')
@@ -67,7 +75,7 @@ app.engine('hbs', engine({
 
 
 app.get('/', async (req, res) => {
-    if(req.session.nombre&&logged.islogged&&logged.isDestroyed===false){
+    if(req.session.nombre&&logged.islogged&&!logged.isDestroyed){
         ProductoModel.find({}).then(productos => {
             menssagesModel.find({}).then(mensajes => {
                 res.render('main', {
@@ -82,23 +90,56 @@ app.get('/', async (req, res) => {
         res.redirect("/login")
     }
 })
-app.post('/login', (req, res) => {
-    const {userName} = req.body
-    if(userName){
-    req.session.nombre =  userName
-    logged.nombre= userName
-    logged.islogged= true
-    res.redirect("/")
-    }
-    else{
-        throw new Error('Completar ')
-    }
-    
+app.post('/login', (req, res, next) => {
+    passport.authenticate('login', {} , (err, user, info)=>{
+        if(!user){
+          return  res.status(400).json({error: "Error en Login: "+ info.msg})
+        }
+        const {userName, contraseña} = req.body
+        
+        if(userName&&contraseña){
+        req.session.nombre =  userName
+        req.session.contraseña= contraseña
+        logged.nombre= userName
+        logged.contraseña=true
+        logged.islogged= true
+        
+        res.redirect("/")
+        }
+        else {
+            if(!userName || !contraseña){
+            res.status(400).json({Error: "Datos ingresados no validos o nulos"})
+            }
+        }
+    })(req, res, next)
 })
+app.post('/register', (req, res, next)=>{
+    passport.authenticate('signup', {}, ()=>{
+        const {userName, contraseña}= req.body
+        if(!userName || !contraseña){
+            res.status(400).json({Error: "Datos ingresados no validos o nulos"})
+        }
+        console.log("HOLAAAAA")
+        req.session.nombre= userName
+        req.session.contraseña= contraseña
+        logged.nombre= userName
+        logged.contraseña=true
+        logged.islogged= true
+        
+        res.redirect("/")
+    })(req, res, next)
+})
+
 app.get('/login', (req, res) => {
     logged.isDestroyed=false
     res.render("Login")
 })
+
+app.get('/register',(req,res)=>{
+     res.render("register")
+})
+
+
 app.get("/logout", (req, res)=>{
     if(req.session.nombre){
     res.render("Logout", {

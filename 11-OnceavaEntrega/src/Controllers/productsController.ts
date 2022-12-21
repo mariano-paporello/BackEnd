@@ -1,5 +1,6 @@
 import { producto } from "../../Public/types"
 import productosModels from "../models/products"
+import { logged } from "../services/server"
 class productsController{
 
    async list(){
