@@ -8,21 +8,35 @@ const strategyOptions = {
   passReqToCallback: true,
 };
 
-const logIn = async (req, userName, password, done) => {
+const logIn = async (req, userName:String, contraseña:String, done) => {
     console.log('LOGIN!!');
-    const user = await userModel.findOne({ userName, password });
-  
-    if (!user) return done(null, false, { mensaje: 'Usuario no encontrado' });
-  
-    console.log('ENCONTRE UN USUARIO');
-    return done(null, user);
+    
+    const user = await userModel.findOne({ $and:[{username: userName}, {password:contraseña}] });
+    console.log(user)
+    if (!user||user==null){
+      
+       console.error("Usuario no encontrado");
+       return done(null, false, {msg: "usuario no encontrado"})
+      }
+      else{
+        
+        console.log('ENCONTRE UN USUARIO');
+        return done(null, user );
+      } 
+    
   };
   
-  const signUp = async (req, userName, password, done) => {
+  const signUp = async (req, userName:String, contraseña:String, done) => {
     console.log('SIGNUP!!');
     try {
-      const newUser = await userModel.create({ userName, password });
-      return done(null, newUser);
+      const usuarioExiste= await userModel.findOne({$and:[{username: userName},{contraseña:contraseña}]})
+      if(!usuarioExiste){
+      const newUser = await userModel.create({ username:userName, password:contraseña });
+      return done(null, newUser)
+    }
+    else{
+      return done(null, false, {mensaje: 'Datos ya existentes con otro usuario'})
+    };
     } catch (err) {
       console.log('Hubo un error!');
       console.log(err);
@@ -33,7 +47,7 @@ const logIn = async (req, userName, password, done) => {
 export const loginFunc = new LocalStrategy(strategyOptions, logIn);
 export const signUpFunc = new LocalStrategy(strategyOptions, signUp);
 
-passport.serializeUser((user, done) => {
+passport.serializeUser((user:any, done) => {
     done(null, user._id);
   });
 

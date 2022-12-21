@@ -24,7 +24,8 @@ declare module 'express-session' {
 const app = express()
 app.use("/api",rutaTest)
 // Session Part:
-let logged = { islogged: false, isDestroyed: false, nombre: '', contraseña: false }
+export const logged = { islogged: false, isDestroyed: false, nombre: '', contraseña: false }
+
 const unSegundo = 1000;
 const unMinuto = unSegundo * 60;
 const unaHora = unMinuto * 60;
@@ -44,19 +45,18 @@ const storeOptions= {
           
         
 }
-app.use(cookieParser());
-app.use(session(storeOptions));
-app.use(passport.initialize())
-app.use(passport.session())
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true })); 
 app.use(express.static('public'))
 
+app.use(cookieParser());
+app.use(session(storeOptions));
+app.use(passport.initialize())
+app.use(passport.session())
 
-passport.use('logIn', loginFunc);
-passport.use('signUp', signUpFunc);
-
+passport.use('login', loginFunc);
+passport.use('signup', signUpFunc);
 
 // HBS PART:
 const viewPath = path.resolve(__dirname, '../../views')
@@ -75,7 +75,7 @@ app.engine('hbs', engine({
 
 
 app.get('/', async (req, res) => {
-    if(req.session.nombre&&logged.islogged&&logged.isDestroyed===false){
+    if(req.session.nombre&&logged.islogged&&!logged.isDestroyed){
         ProductoModel.find({}).then(productos => {
             menssagesModel.find({}).then(mensajes => {
                 res.render('main', {
@@ -90,35 +90,44 @@ app.get('/', async (req, res) => {
         res.redirect("/login")
     }
 })
-app.post('/login', (req, res) => {
-    const {userName, contraseña} = req.body
-    if(userName&&contraseña){
-        // if(contraseñaExiste&&usuarioexiste&&contraseñaYUsuariosCompatibles){
-        // Hago lo que tengo que hacer para poder mostrar todo el contenido a este usuario
-        // }
-    
-    req.session.nombre =  userName
-    req.session.contraseña= contraseña
-    logged.nombre= userName
-    logged.contraseña=true
-    logged.islogged= true
-    res.redirect("/")
-    }
-    else {
-        if(!userName){
-        throw new Error('Ingresar usuario para acceder')
+app.post('/login', (req, res, next) => {
+    passport.authenticate('login', {} , (err, user, info)=>{
+        if(!user){
+          return  res.status(400).json({error: "Error en Login: "+ info.msg})
         }
-        if(!contraseña){
-            throw new Error('Ingresar contraseña de usuario para acceder')
+        const {userName, contraseña} = req.body
+        
+        if(userName&&contraseña){
+        req.session.nombre =  userName
+        req.session.contraseña= contraseña
+        logged.nombre= userName
+        logged.contraseña=true
+        logged.islogged= true
+        
+        res.redirect("/")
         }
-    }
-    
+        else {
+            if(!userName || !contraseña){
+            res.status(400).json({Error: "Datos ingresados no validos o nulos"})
+            }
+        }
+    })(req, res, next)
 })
-app.post('/register', (req, res)=>{
-    const {userName, contraseña}= req.body
-    req.session.nombre= userName
-    req.session.contraseña= contraseña
-    res.redirect("/")
+app.post('/register', (req, res, next)=>{
+    passport.authenticate('signup', {}, ()=>{
+        const {userName, contraseña}= req.body
+        if(!userName || !contraseña){
+            res.status(400).json({Error: "Datos ingresados no validos o nulos"})
+        }
+        console.log("HOLAAAAA")
+        req.session.nombre= userName
+        req.session.contraseña= contraseña
+        logged.nombre= userName
+        logged.contraseña=true
+        logged.islogged= true
+        
+        res.redirect("/")
+    })(req, res, next)
 })
 
 app.get('/login', (req, res) => {
