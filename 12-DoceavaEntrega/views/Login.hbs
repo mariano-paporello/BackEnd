@@ -1,0 +1,26 @@
+<div class="container-fluid d-flex justify-content-center importantDiv">
+    <div id="divLogin" class="bg-secondary p-3 mb-3 rounded">
+        <div id="divFormLogin" class="">
+            <h2>Form de Login</h2>
+            <form  action="/login" method="post" class="p-2">
+                    <ul>
+                <li>
+                    <label for="userName">Ingrese su nombre</label>
+                    <input class="bg-dark text-light" type="text" id="userName" name="userName">
+                </li>
+                <li>
+                     <label for="contraseña">Contraseña</label>
+                    <input class="bg-dark text-light" type="password" id="contraseña" name="contraseña">
+                </li>
+                   <li>
+                    <button class="bg-dark text-light" type="submit">Login</button> 
+                   </li>
+                    
+            </ul>
+            </form>
+
+        </div>
+        <hr>
+       <p >¿No tienes una cuenta?  <button class="bg-warning"><a class="text-light" href="/register">Haz click aquí</a></button></p>
+    </div>
+</div>
