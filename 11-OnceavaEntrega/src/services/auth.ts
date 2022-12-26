@@ -1,5 +1,6 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
+import {hash, compare, genSalt} from "bcrypt"
 import  userModel  from '../models/user';
 
 
@@ -9,29 +10,34 @@ const strategyOptions = {
   passReqToCallback: true,
 };
 
-const logIn = async (req, userName:String, contraseña:String, done) => {
+const logIn = async (req, userName:string, contraseña:string, done) => {
     console.log('LOGIN!!');
     
-    const user = await userModel.findOne({ $and:[{username: userName}, {password:contraseña}] });
-    console.log(user)
-    if (!user||user==null){
+    const posibleUser:any = await userModel.findOne( {username: userName});
+    const userexist= await compare(contraseña, posibleUser?.password)
+    console.log(userexist)
+    if (!userexist||userexist==null){
       
        console.error("Usuario no encontrado");
        return done(null, false, {msg: "usuario no encontrado"})
       }
       else{
         console.log('ENCONTRE UN USUARIO');
-        return done(null, user );
+        return done(null, posibleUser );
       } 
     
   };
   
-  const signUp = async (req, userName:String, contraseña:String, done) => {
+  const signUp = async (req, userName:string, contraseña:string, done) => {
     console.log('SIGNUP!!');
     try {
-      const usuarioExiste:any= await userModel.findOne({$and:[{username: userName},{contraseña:contraseña}]})
+      const salt = await genSalt(10)
+      const contraseñaHashed= await hash(contraseña, salt)
+      console.log("contraseña hashed: "+contraseñaHashed)
+      const usuarioExiste:any= await userModel.findOne({$and:[{username: userName},{password:contraseñaHashed}]})
       if(!usuarioExiste){
-      const newUser = await  userModel.create({ username:userName, password:contraseña });
+      const newUser = await  userModel.create({ username:userName, password:contraseñaHashed });
+      console.log("NewUser: "+newUser)
       return done(null, newUser)
     }
     else{
