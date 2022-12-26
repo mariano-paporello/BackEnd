@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-
+import byCript from "bcrypt"
 const users= 'users'
 
 const usersSchema = new mongoose.Schema(
@@ -9,6 +9,7 @@ const usersSchema = new mongoose.Schema(
 },
 {timestamps: true}
 )
+
 
 const userModel = mongoose.model(users, usersSchema)
 export default userModel 

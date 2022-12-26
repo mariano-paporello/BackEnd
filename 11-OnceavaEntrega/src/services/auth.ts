@@ -2,6 +2,7 @@ import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import  userModel  from '../models/user';
 
+
 const strategyOptions = {
   usernameField: 'userName',
   passwordField: 'contraseña',
@@ -19,7 +20,6 @@ const logIn = async (req, userName:String, contraseña:String, done) => {
        return done(null, false, {msg: "usuario no encontrado"})
       }
       else{
-        
         console.log('ENCONTRE UN USUARIO');
         return done(null, user );
       } 
@@ -29,9 +29,9 @@ const logIn = async (req, userName:String, contraseña:String, done) => {
   const signUp = async (req, userName:String, contraseña:String, done) => {
     console.log('SIGNUP!!');
     try {
-      const usuarioExiste= await userModel.findOne({$and:[{username: userName},{contraseña:contraseña}]})
+      const usuarioExiste:any= await userModel.findOne({$and:[{username: userName},{contraseña:contraseña}]})
       if(!usuarioExiste){
-      const newUser = await userModel.create({ username:userName, password:contraseña });
+      const newUser = await  userModel.create({ username:userName, password:contraseña });
       return done(null, newUser)
     }
     else{
