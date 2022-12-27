@@ -1,48 +1,37 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import {hash, compare, genSalt} from "bcrypt"
-import  userModel  from '../models/user';
+import  {usersModel}  from '../models/user';
 
 
 const strategyOptions = {
-  usernameField: 'userName',
-  passwordField: 'contraseña',
+  username: "username",
+  password: "password",
   passReqToCallback: true,
 };
 
-const logIn = async (req, userName:string, contraseña:string, done) => {
-    console.log('LOGIN!!');
+const logIn = async (req, username,password, done) => {
+console.log("LOOOGEOOO")
     
-    const posibleUser:any = await userModel.findOne( {username: userName});
-    const userexist= await compare(contraseña, posibleUser?.password)
-    console.log(userexist)
-    if (!userexist||userexist==null){
-      
-       console.error("Usuario no encontrado");
-       return done(null, false, {msg: "usuario no encontrado"})
-      }
-      else{
-        console.log('ENCONTRE UN USUARIO');
-        return done(null, posibleUser );
-      } 
-    
+  const user = await usersModel.logIn(username, password)
+  if(user){
+    console.log("el usuario"+user)
+        req.session.nombre= user.username
+        req.session.contraseña= user.password
+        return done(null, user)
+  }else{
+    return done(null, false, {msg: "Usuario no encontrado"})
+  } 
   };
   
-  const signUp = async (req, userName:string, contraseña:string, done) => {
+  const signUp = async (req, username, password, done) => {
     console.log('SIGNUP!!');
     try {
-      const salt = await genSalt(10)
-      const contraseñaHashed= await hash(contraseña, salt)
-      console.log("contraseña hashed: "+contraseñaHashed)
-      const usuarioExiste:any= await userModel.findOne({$and:[{username: userName},{password:contraseñaHashed}]})
-      if(!usuarioExiste){
-      const newUser = await  userModel.create({ username:userName, password:contraseñaHashed });
-      console.log("NewUser: "+newUser)
-      return done(null, newUser)
-    }
-    else{
-      return done(null, false, {mensaje: 'Datos ya existentes con otro usuario'})
-    };
+      console.log("la data es: "+{username, password})
+      const userExiste= usersModel.singUp({username, password})
+      req.session.nombre =  username
+      req.session.contraseña= password
+      console.log("NewUser: "+userExiste)
+      return done(null, userExiste)
     } catch (err) {
       console.log('Hubo un error!');
       console.log(err);
@@ -59,7 +48,7 @@ passport.serializeUser((user:any, done) => {
 
   passport.deserializeUser((userId, done) => {
     console.log('Se Ejecuta el desserializeUser');
-    userModel.findById(userId).then((user) => {
+    usersModel.findById(userId).then((user) => {
       return done(null, user);
     })
   });
