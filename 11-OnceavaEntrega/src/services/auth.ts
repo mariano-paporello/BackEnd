@@ -1,42 +1,69 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import  userModel  from '../models/user';
+import  {usersModel}  from '../models/user';
+import jwt from "jsonwebtoken"
 
+// JWS PART
+  export const generateAuthToken = (user)=>{
+    const payload= {
+      usedId: user._id,
+      username: user.username
+    };
+
+    const token = jwt.sign(payload, "secreto", {expiresIn: '1m'});
+    return token
+  }
+
+  export const checkAuth = async (req,res,next)=>{
+    const token = req.header['x-login-token'];
+      if(!token){
+        return res.status(401).json({msg:"NO AUTORIZADO"}) 
+      }
+      try{
+        const decode= jwt.veryify(
+          token,
+          "secreto"
+        )
+        console.log(decode)
+        const user = await usersModel.findById(decode.userId)
+        req.user = user
+      }catch(err){
+        console.log(err)
+        return res.status(401).json({msg:' NO AUTORIZADO'})
+      }
+  }
+
+// PASSPORT PART
 const strategyOptions = {
-  usernameField: 'userName',
-  passwordField: 'contraseña',
+  username: "username",
+  password: "password",
   passReqToCallback: true,
 };
 
-const logIn = async (req, userName:String, contraseña:String, done) => {
-    console.log('LOGIN!!');
+const logIn = async (req, username,password, done) => {
+console.log("LOOOGEOOO")
     
-    const user = await userModel.findOne({ $and:[{username: userName}, {password:contraseña}] });
-    console.log(user)
-    if (!user||user==null){
-      
-       console.error("Usuario no encontrado");
-       return done(null, false, {msg: "usuario no encontrado"})
-      }
-      else{
-        
-        console.log('ENCONTRE UN USUARIO');
-        return done(null, user );
-      } 
+  const user = await usersModel.logIn(username, password)
+  if(user){
+    console.log("el usuario"+user)
     
+        req.session.nombre= user.username
+        req.session.contraseña= user.password
+        return done(null, user)
+  }else{
+    return done(null, false, {msg: "Usuario no encontrado"})
+  } 
   };
   
-  const signUp = async (req, userName:String, contraseña:String, done) => {
+  const signUp = async (req, username, password, done) => {
     console.log('SIGNUP!!');
     try {
-      const usuarioExiste= await userModel.findOne({$and:[{username: userName},{contraseña:contraseña}]})
-      if(!usuarioExiste){
-      const newUser = await userModel.create({ username:userName, password:contraseña });
-      return done(null, newUser)
-    }
-    else{
-      return done(null, false, {mensaje: 'Datos ya existentes con otro usuario'})
-    };
+      console.log("la data es: "+{username, password})
+      const user= usersModel.singUp({username, password})
+      req.session.nombre =  username
+      req.session.contraseña= password
+      console.log("NewUser: "+user)
+      return done(null, await user)
     } catch (err) {
       console.log('Hubo un error!');
       console.log(err);
@@ -53,7 +80,7 @@ passport.serializeUser((user:any, done) => {
 
   passport.deserializeUser((userId, done) => {
     console.log('Se Ejecuta el desserializeUser');
-    userModel.findById(userId).then((user) => {
+    usersModel.findById(userId).then((user) => {
       return done(null, user);
     })
   });

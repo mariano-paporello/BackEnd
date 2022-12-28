@@ -10,7 +10,7 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo'
 import config from '../config/index'
 import passport from "passport"
-import { loginFunc, signUpFunc } from './auth'
+import { loginFunc, signUpFunc, checkAuth, generateAuthToken } from './auth'
 
 declare module 'express-session' {
     interface SessionData {
@@ -74,8 +74,9 @@ app.engine('hbs', engine({
 }))
 
 
+
 app.get('/', async (req, res) => {
-    if(req.session.nombre&&logged.islogged&&!logged.isDestroyed){
+    if(req.session.nombre&&logged.islogged&&!logged.isDestroyed&&req.user){
         ProductoModel.find({}).then(productos => {
             menssagesModel.find({}).then(mensajes => {
                 res.render('main', {
@@ -90,43 +91,36 @@ app.get('/', async (req, res) => {
         res.redirect("/login")
     }
 })
-app.post('/login', (req, res, next) => {
-    passport.authenticate('login', {} , (err, user, info)=>{
-        if(!user){
-          return  res.status(400).json({error: "Error en Login: "+ info.msg})
-        }
-        const {userName, contraseña} = req.body
-        
-        if(userName&&contraseña){
-        req.session.nombre =  userName
-        req.session.contraseña= contraseña
-        logged.nombre= userName
-        logged.contraseña=true
-        logged.islogged= true
-        
-        res.redirect("/")
-        }
-        else {
-            if(!userName || !contraseña){
-            res.status(400).json({Error: "Datos ingresados no validos o nulos"})
-            }
-        }
-    })(req, res, next)
+app.post('/login',async (req, res, next) => {
+passport.authenticate('login', {} , async(err, user, info)=>{   
+        const data = req.body
+
+    if(user.username&&user.password){
+            logged.nombre= user.username
+            logged.contraseña=true
+            logged.islogged= true
+    res.redirect("/")
+    }else {
+        res.status(400).json({Error: "Datos ingresados no validos o nulos."})
+    }
+        })(req, res, next)
 })
-app.post('/register', (req, res, next)=>{
-    passport.authenticate('signup', {}, ()=>{
-        const {userName, contraseña}= req.body
-        if(!userName || !contraseña){
-            res.status(400).json({Error: "Datos ingresados no validos o nulos"})
-        }
-        console.log("HOLAAAAA")
-        req.session.nombre= userName
-        req.session.contraseña= contraseña
-        logged.nombre= userName
+
+
+
+app.post('/register', async(req, res, next)=>{
+    passport.authenticate('signup', {}, (err, user, info)=>{
+    const {username, password} = req.body
+
+    if(!username || !password){
+        res.status(400).json({Error: "Datos ingresados no validos o nulos"})
+    }
+    const token = generateAuthToken(user)
+        logged.nombre= username
         logged.contraseña=true
         logged.islogged= true
         
-        res.redirect("/")
+        res.header('x-login-token', token).json({msg:"TODO GOOD"})
     })(req, res, next)
 })
 
