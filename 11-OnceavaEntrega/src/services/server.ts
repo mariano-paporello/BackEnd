@@ -10,7 +10,7 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo'
 import config from '../config/index'
 import passport from "passport"
-import { loginFunc, signUpFunc } from './auth'
+import { loginFunc, signUpFunc, checkAuth, generateAuthToken } from './auth'
 
 declare module 'express-session' {
     interface SessionData {
@@ -76,7 +76,7 @@ app.engine('hbs', engine({
 
 
 app.get('/', async (req, res) => {
-    if(req.session.nombre&&logged.islogged&&!logged.isDestroyed){
+    if(req.session.nombre&&logged.islogged&&!logged.isDestroyed&&req.user){
         ProductoModel.find({}).then(productos => {
             menssagesModel.find({}).then(mensajes => {
                 res.render('main', {
@@ -95,8 +95,8 @@ app.post('/login',async (req, res, next) => {
 passport.authenticate('login', {} , async(err, user, info)=>{   
         const data = req.body
 
-    if(data.username&&data.password){
-            logged.nombre= data.username
+    if(user.username&&user.password){
+            logged.nombre= user.username
             logged.contraseña=true
             logged.islogged= true
     res.redirect("/")
@@ -109,18 +109,18 @@ passport.authenticate('login', {} , async(err, user, info)=>{
 
 
 app.post('/register', async(req, res, next)=>{
-    passport.authenticate('signup', {}, ()=>{
+    passport.authenticate('signup', {}, (err, user, info)=>{
     const {username, password} = req.body
 
     if(!username || !password){
         res.status(400).json({Error: "Datos ingresados no validos o nulos"})
     }
-    
+    const token = generateAuthToken(user)
         logged.nombre= username
         logged.contraseña=true
         logged.islogged= true
         
-        res.redirect("/")
+        res.header('x-login-token', token).json({msg:"TODO GOOD"})
     })(req, res, next)
 })
 

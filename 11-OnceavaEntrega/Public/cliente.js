@@ -11,22 +11,6 @@ const divLogeo = document.getElementById('divFormLogin')
 const containerDiv = document.getElementById("divLogin")
 
 
-// formLogin.addEventListener("submit", (ev)=>{
-//   ev.preventDefault()
-//   if(!userLoginName.value){
-//     throw new Error("El campo esta incopleto")
-//   }else{
-//     divLogeo.classList.add('esconder') 
-//     socket.emit("enviarUserLoginName", userLoginName.value)
-//     socket.on("userSaved", async data=>{
-//       const BienvenidaDiv = document.createElement("div")
-//       BienvenidaDiv.innerHTML= `<h2> Bienvenido ${ await data}</h2> <button class="bg-warning text-light" type="submit">Logout</button`
-//       containerDiv.appendChild(BienvenidaDiv)
-//     })
-//   }
-// })
-
-
 
 
 
@@ -50,6 +34,11 @@ form.addEventListener("submit", (ev) => {
   }
 })
 
+socket.on("noEstaLogeado", boolean=>{
+  if(boolean==false){
+  alert("No esta logeado o se termino se tiempo de logeo.")
+}
+})
 // Table of Products
 const divOfProducts = document.getElementById('listaDeProductos')
 const noProductos = document.getElementById("noProductos")

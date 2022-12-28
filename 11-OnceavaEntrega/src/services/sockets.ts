@@ -3,7 +3,7 @@ import productsController from "../Controllers/productsController"
 import mjController from "../Controllers/mensajesController"
 
 
-const initWsServer =  (server, session) =>  {
+const initWsServer =  (server) =>  {
     const SocketServer = io(server)
 
     SocketServer.on('connection', (socket) => {
@@ -12,7 +12,6 @@ const initWsServer =  (server, session) =>  {
             Bienvenida: 'hola'
         })
         socket.on("enviarNuevoProducto",async (data)  => {
-            
             const prodController = new productsController()
             const nuevoProducto= await prodController.newProduct(data)
             SocketServer.emit("productosArray", nuevoProducto)

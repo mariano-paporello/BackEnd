@@ -1,8 +1,39 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import  {usersModel}  from '../models/user';
+import jwt from "jsonwebtoken"
 
+// JWS PART
+  export const generateAuthToken = (user)=>{
+    const payload= {
+      usedId: user._id,
+      username: user.username
+    };
 
+    const token = jwt.sign(payload, "secreto", {expiresIn: '1m'});
+    return token
+  }
+
+  export const checkAuth = async (req,res,next)=>{
+    const token = req.header['x-login-token'];
+      if(!token){
+        return res.status(401).json({msg:"NO AUTORIZADO"}) 
+      }
+      try{
+        const decode= jwt.veryify(
+          token,
+          "secreto"
+        )
+        console.log(decode)
+        const user = await usersModel.findById(decode.userId)
+        req.user = user
+      }catch(err){
+        console.log(err)
+        return res.status(401).json({msg:' NO AUTORIZADO'})
+      }
+  }
+
+// PASSPORT PART
 const strategyOptions = {
   username: "username",
   password: "password",
@@ -15,6 +46,7 @@ console.log("LOOOGEOOO")
   const user = await usersModel.logIn(username, password)
   if(user){
     console.log("el usuario"+user)
+    
         req.session.nombre= user.username
         req.session.contraseña= user.password
         return done(null, user)
@@ -27,11 +59,11 @@ console.log("LOOOGEOOO")
     console.log('SIGNUP!!');
     try {
       console.log("la data es: "+{username, password})
-      const userExiste= usersModel.singUp({username, password})
+      const user= usersModel.singUp({username, password})
       req.session.nombre =  username
       req.session.contraseña= password
-      console.log("NewUser: "+userExiste)
-      return done(null, userExiste)
+      console.log("NewUser: "+user)
+      return done(null, await user)
     } catch (err) {
       console.log('Hubo un error!');
       console.log(err);
