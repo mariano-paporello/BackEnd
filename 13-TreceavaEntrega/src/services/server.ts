@@ -41,10 +41,8 @@ const storeOptions= {
         resave: false,
         saveUninitialized: false,
         rolling: true,
-        cookie: { maxAge: unMinuto }
-          
-        
-};
+        cookie: { maxAge: unMinuto }    
+    };
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true })); 

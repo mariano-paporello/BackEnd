@@ -39,27 +39,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var server = require('./services/server');
-var initWsServer = require("./services/sockets");
-var databaseMongoose_1 = __importDefault(require("./db/databaseMongoose"));
-var minimist_1 = __importDefault(require("minimist"));
-var args = (0, minimist_1.default)(process.argv);
-console.log(args);
-var port = args.port || 8080;
-var init = function () { return __awaiter(void 0, void 0, void 0, function () {
+exports.matchPassword = exports.encryptPasssword = void 0;
+var bcrypt_1 = __importDefault(require("bcrypt"));
+var encryptPasssword = function (password) { return __awaiter(void 0, void 0, void 0, function () {
+    var salt;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, initWsServer(server)];
+            case 0: return [4 /*yield*/, bcrypt_1.default.genSalt(10)];
             case 1:
-                _a.sent();
-                return [4 /*yield*/, (0, databaseMongoose_1.default)()];
-            case 2:
-                _a.sent();
-                server.listen(port, function () {
-                    console.log("Server is up in ".concat(port));
-                });
-                return [2 /*return*/];
+                salt = _a.sent();
+                return [4 /*yield*/, bcrypt_1.default.hash(password, salt)];
+            case 2: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
-init();
+exports.encryptPasssword = encryptPasssword;
+var matchPassword = function (passwordIngresed, password) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, bcrypt_1.default.compare(passwordIngresed, password)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+};
+exports.matchPassword = matchPassword;

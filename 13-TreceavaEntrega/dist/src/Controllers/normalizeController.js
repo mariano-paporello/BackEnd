@@ -39,27 +39,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var server = require('./services/server');
-var initWsServer = require("./services/sockets");
-var databaseMongoose_1 = __importDefault(require("./db/databaseMongoose"));
-var minimist_1 = __importDefault(require("minimist"));
-var args = (0, minimist_1.default)(process.argv);
-console.log(args);
-var port = args.port || 8080;
-var init = function () { return __awaiter(void 0, void 0, void 0, function () {
+exports.getAllDenorm = exports.getAllNorm = void 0;
+var normalizr_1 = require("normalizr");
+var mensajesController_1 = __importDefault(require("./mensajesController"));
+var author = new normalizr_1.schema.Entity('authors', {});
+var message = new normalizr_1.schema.Entity('menssages', { author: author });
+var SchemaFin = [message];
+var getAllNorm = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var mensajes;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, initWsServer(server)];
+            case 0: return [4 /*yield*/, mensajesController_1.default.list()];
             case 1:
-                _a.sent();
-                return [4 /*yield*/, (0, databaseMongoose_1.default)()];
-            case 2:
-                _a.sent();
-                server.listen(port, function () {
-                    console.log("Server is up in ".concat(port));
-                });
-                return [2 /*return*/];
+                mensajes = _a.sent();
+                return [2 /*return*/, (0, normalizr_1.normalize)(mensajes, SchemaFin)];
         }
     });
 }); };
-init();
+exports.getAllNorm = getAllNorm;
+var getAllDenorm = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var mensajesNormalize;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, exports.getAllNorm)()];
+            case 1:
+                mensajesNormalize = _a.sent();
+                return [2 /*return*/, (0, normalizr_1.denormalize)(mensajesNormalize.result, SchemaFin, mensajesNormalize.entities)];
+        }
+    });
+}); };
+exports.getAllDenorm = getAllDenorm;
