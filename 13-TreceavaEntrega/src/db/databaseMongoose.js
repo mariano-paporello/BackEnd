@@ -1,11 +1,11 @@
 const mongoose = require("mongoose")
+const config = require("../config/index");
 
-const connectionString = "mongodb+srv://mariano:zRzWPTFXf3MKeZvf@freecluster.eclcymm.mongodb.net/?retryWrites=true&w=majority";
 
 const initMongoDB = async () => {
   try {
     console.log('CONECTANDO A MI DB');
-    await mongoose.connect(connectionString, {
+     mongoose.connect(config.default.MONGO_ATLAS_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

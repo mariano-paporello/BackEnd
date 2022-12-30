@@ -34,17 +34,17 @@ const storeOptions= {
     store: MongoStore.create({
         mongoUrl: config.MONGO_ATLAS_URL,
         crypto: {
-            secret: "1234"
+            secret: config.CRYPTO_SECRET 
         }
         }),
-        secret: 'SuperSecreto',
+        secret: config.SECRET,
         resave: false,
         saveUninitialized: false,
         rolling: true,
         cookie: { maxAge: unMinuto }
           
         
-}
+};
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true })); 
@@ -52,8 +52,8 @@ app.use(express.static('public'))
 
 app.use(cookieParser());
 app.use(session(storeOptions));
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.initialize());
+app.use(passport.session());
 
 passport.use('login', loginFunc);
 passport.use('signup', signUpFunc);
@@ -76,7 +76,7 @@ app.engine('hbs', engine({
 
 
 app.get('/', async (req, res) => {
-    if(req.session.nombre&&logged.islogged&&!logged.isDestroyed&&req.user){
+    if(req.session.nombre&&logged.islogged&&!logged.isDestroyed){+
         ProductoModel.find({}).then(productos => {
             menssagesModel.find({}).then(mensajes => {
                 res.render('main', {
@@ -94,12 +94,12 @@ app.get('/', async (req, res) => {
 app.post('/login',async (req, res, next) => {
 passport.authenticate('login', {} , async(err, user, info)=>{   
         const data = req.body
-
     if(user.username&&user.password){
+        const token = generateAuthToken(user)
             logged.nombre= user.username
             logged.contraseña=true
             logged.islogged= true
-    res.redirect("/")
+    res.header('x-login-token', token).redirect("/")
     }else {
         res.status(400).json({Error: "Datos ingresados no validos o nulos."})
     }
@@ -120,7 +120,7 @@ app.post('/register', async(req, res, next)=>{
         logged.contraseña=true
         logged.islogged= true
         
-        res.header('x-login-token', token).json({msg:"TODO GOOD"})
+        res.header('x-login-token', token).redirect("/")
     })(req, res, next)
 })
 

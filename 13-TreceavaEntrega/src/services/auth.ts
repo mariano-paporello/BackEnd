@@ -1,5 +1,6 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
+import config from '../config/index';
 import  {usersModel}  from '../models/user';
 import jwt from "jsonwebtoken"
 
@@ -10,7 +11,7 @@ import jwt from "jsonwebtoken"
       username: user.username
     };
 
-    const token = jwt.sign(payload, "secreto", {expiresIn: '1m'});
+    const token = jwt.sign(payload, config.TOKEN_SECRET, {expiresIn: '1m'});
     return token
   }
 
@@ -22,7 +23,7 @@ import jwt from "jsonwebtoken"
       try{
         const decode= jwt.veryify(
           token,
-          "secreto"
+          config.TOKEN_SECRET
         )
         console.log(decode)
         const user = await usersModel.findById(decode.userId)
@@ -45,8 +46,6 @@ console.log("LOOOGEOOO")
     
   const user = await usersModel.logIn(username, password)
   if(user){
-    console.log("el usuario"+user)
-    
         req.session.nombre= user.username
         req.session.contraseña= user.password
         return done(null, user)
@@ -58,12 +57,10 @@ console.log("LOOOGEOOO")
   const signUp = async (req, username, password, done) => {
     console.log('SIGNUP!!');
     try {
-      console.log("la data es: "+{username, password})
-      const user= usersModel.singUp({username, password})
-      req.session.nombre =  username
-      req.session.contraseña= password
-      console.log("NewUser: "+user)
-      return done(null, await user)
+      const user=await usersModel.singUp({username, password})
+      req.session.nombre =  user.username
+      req.session.contraseña= user.password
+      return done(null,  user)
     } catch (err) {
       console.log('Hubo un error!');
       console.log(err);
