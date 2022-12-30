@@ -152,6 +152,17 @@ app.get("/logout", (req, res)=>{
     }
 })
 
+app.get("/info", (req, res)=>{
+    console.log(process.version)
+   res.json({info:`Directorio actual de trabajo ===> ${process.cwd()}.
+   ID Del proceso actual ====> ${process.pid}.
+   Version de NodeJs corriendo ====> ${process.version}.
+   Titulo del proceso ====> ${process.title}.
+   Sistema Operativo ====> ${process.platform}.
+   Uso de memoria====> ${JSON.stringify(process.memoryUsage())}.`}) 
+   
+})
+
 
 
 

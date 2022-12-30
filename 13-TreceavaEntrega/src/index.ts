@@ -5,7 +5,6 @@ import minimist from "minimist"
 
 const args= minimist(process.argv)
 
-console.log(args)
 const port = args.port || 8080
 const init= async ()=>{
     await initWsServer(server)
