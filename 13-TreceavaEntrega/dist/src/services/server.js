@@ -178,5 +178,9 @@ app.get("/logout", function (req, res) {
         res.redirect("/");
     }
 });
+app.get("/info", function (req, res) {
+    console.log(process.version);
+    res.json({ info: "Directorio actual de trabajo ===> ".concat(process.cwd(), ".\n   ID Del proceso actual ====> ").concat(process.pid, ".\n   Version de NodeJs corriendo ====> ").concat(process.version, ".\n   Titulo del proceso ====> ").concat(process.title, ".\n   Sistema Operativo ====> ").concat(process.platform, ".\n   Uso de memoria====> ").concat(JSON.stringify(process.memoryUsage()), ".") });
+});
 var HTTPServer = new http_1.default.Server(app);
 module.exports = HTTPServer;

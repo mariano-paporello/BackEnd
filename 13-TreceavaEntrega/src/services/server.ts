@@ -10,7 +10,8 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo'
 import config from '../config/index'
 import passport from "passport"
-import { loginFunc, signUpFunc, checkAuth, generateAuthToken } from './auth'
+import { loginFunc, signUpFunc, generateAuthToken } from './auth'
+
 
 declare module 'express-session' {
     interface SessionData {

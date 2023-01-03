@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,67 +34,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var _this = this;
+var randomCreator = function (cantidad) {
+    var list = {};
+    for (var i = 0; i < cantidad; i++) {
+        var numberKey = Math.round(Math.random() * (1000));
+        console.log(numberKey);
+        if (numberKey in list) {
+            list[numberKey]++;
+        }
+        else {
+            list[numberKey] = 1;
+        }
+    }
+    return list;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = require("express");
-var normalizeController_1 = require("../Controllers/normalizeController");
-var testController_1 = require("../Controllers/testController");
-var child_process_1 = require("child_process");
-var path_1 = __importDefault(require("path"));
-var rutaPrincipal = (0, express_1.Router)();
-var controllerPath = path_1.default.resolve(__dirname, '../Controllers/randomsController.ts');
-rutaPrincipal.get("/normalize", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
-            case 0:
-                _b = (_a = res).json;
-                return [4 /*yield*/, (0, normalizeController_1.getAllNorm)()];
-            case 1:
-                _b.apply(_a, [_c.sent()]);
-                return [2 /*return*/];
+process.on('message', function (msg) { return __awaiter(_this, void 0, void 0, function () {
+    var result;
+    return __generator(this, function (_a) {
+        msg = JSON.parse(msg);
+        if (msg.msg == 'start') {
+            console.log('Start Process');
+            result = randomCreator(Number(msg.cantidad));
+            console.log("el resultado es: " + JSON.stringify(result));
+            if (process && process.send) {
+                process.send(result);
+            }
         }
+        return [2 /*return*/];
     });
 }); });
-rutaPrincipal.get("/denormalize", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
-            case 0:
-                _b = (_a = res).json;
-                return [4 /*yield*/, (0, normalizeController_1.getAllDenorm)()];
-            case 1:
-                _b.apply(_a, [_c.sent()]);
-                return [2 /*return*/];
-        }
-    });
-}); });
-rutaPrincipal.get("/test-fake-products", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, _b;
-    var _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
-            case 0:
-                _b = (_a = res).json;
-                _c = {};
-                return [4 /*yield*/, (0, testController_1.crear5Productos)()];
-            case 1:
-                _b.apply(_a, [(_c.ProductosFake = _d.sent(), _c)]);
-                return [2 /*return*/];
-        }
-    });
-}); });
-rutaPrincipal.get("/randoms", function (req, res) {
-    var cantidad;
-    req.query.cant ? (cantidad = Number(req.query.cant)) : 100000000;
-    var calculo = (0, child_process_1.fork)(controllerPath);
-    calculo.send(JSON.stringify({ msg: "start", cantidad: cantidad }));
-    calculo.on('message', function (result) {
-        res.json({
-            Resultado: result
-        });
-    });
-});
-exports.default = rutaPrincipal;

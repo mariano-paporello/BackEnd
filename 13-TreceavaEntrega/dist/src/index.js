@@ -44,7 +44,6 @@ var initWsServer = require("./services/sockets");
 var databaseMongoose_1 = __importDefault(require("./db/databaseMongoose"));
 var minimist_1 = __importDefault(require("minimist"));
 var args = (0, minimist_1.default)(process.argv);
-console.log(args);
 var port = args.port || 8080;
 var init = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
