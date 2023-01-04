@@ -18,4 +18,4 @@ const initMongoDB = async () => {
 };
 
 
-module.exports= initMongoDB 
+export default initMongoDB 

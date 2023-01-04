@@ -4,6 +4,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js ",
+    "forever:start": "forever -w start ./dist/src/index.js ",
+    "forever:list":"forever list",
+    "forever:stop": "forever stopall",
     "build": "tsc",
     "watch": "tsc -w",
     "dev": "nodemon --port=8000",
@@ -34,6 +37,7 @@
     "express": "^4.18.2",
     "express-handlebars": "^6.0.6",
     "express-session": "^1.17.3",
+    "forever": "^4.0.3",
     "http": "^0.0.1-security",
     "jest": "^29.3.1",
     "jsonwebtoken": "^9.0.0",
