@@ -21,10 +21,10 @@ if (args.modo === "CLUSTER" && cluster_1.default.isPrimary) {
     for (var i = 0; i < numCPUs; i++) {
         cluster_1.default.fork();
     }
-    // cluster.on('exit', (worker, code) => {
-    //     console.log(`Worker ${worker.process.pid} with code ${code}`);
-    //     cluster.fork();
-    // })
+    cluster_1.default.on('exit', function (worker, code) {
+        console.log("Worker ".concat(worker.process.pid, " with code ").concat(code));
+        cluster_1.default.fork();
+    });
 }
 else {
     server.listen(port, function () {

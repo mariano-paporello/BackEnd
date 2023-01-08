@@ -54,6 +54,8 @@ var connect_mongo_1 = __importDefault(require("connect-mongo"));
 var index_2 = __importDefault(require("../config/index"));
 var passport_1 = __importDefault(require("passport"));
 var auth_1 = require("./auth");
+var minimist_1 = __importDefault(require("minimist"));
+var args = (0, minimist_1.default)(process.argv);
 var app = (0, express_1.default)();
 app.use("/api", index_1.default);
 // Session Part:
@@ -195,7 +197,14 @@ app.get("/logout", function (req, res) {
 app.get("/info", function (req, res) {
     console.log(process.version);
     res.json({
-        info: "Directorio actual de trabajo ===> ".concat(process.cwd(), ".\n   ID Del proceso actual ====> ").concat(process.pid, ".\n   Version de NodeJs corriendo ====> ").concat(process.version, ".\n   Titulo del proceso ====> ").concat(process.title, ".\n   Sistema Operativo ====> ").concat(process.platform, ".\n   Uso de memoria====> ").concat(JSON.stringify(process.memoryUsage()), ".\n   Cantidad de procesadores ====> ").concat(os_1.default.cpus().length)
+        "Directorio actual de trabajo": process.cwd(),
+        "id ID Del proceso actual": process.pid,
+        "Version de NodeJs corriendo": process.version,
+        "Titulo del proceso": process.title,
+        "Sistema Operativo": process.platform,
+        "Uso de memoria": JSON.stringify(process.memoryUsage()),
+        "Cantidad de procesadores": os_1.default.cpus().length,
+        "port": args.port
     });
 });
 var HTTPServer = new http_1.default.Server(app);

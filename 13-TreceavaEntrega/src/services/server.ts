@@ -19,8 +19,9 @@ import {
     signUpFunc,
     generateAuthToken
 } from './auth'
+import minimist from 'minimist'
 
-
+const args = minimist(process.argv)
 declare module 'express-session' {
     interface SessionData {
         nombre: String,
@@ -181,13 +182,14 @@ export const logged = {
     app.get("/info", (req, res) => {
         console.log(process.version)
         res.json({
-            info: `Directorio actual de trabajo ===> ${process.cwd()}.
-   ID Del proceso actual ====> ${process.pid}.
-   Version de NodeJs corriendo ====> ${process.version}.
-   Titulo del proceso ====> ${process.title}.
-   Sistema Operativo ====> ${process.platform}.
-   Uso de memoria====> ${JSON.stringify(process.memoryUsage())}.
-   Cantidad de procesadores ====> ${os.cpus().length}`
+            "Directorio actual de trabajo": process.cwd(),
+            "id ID Del proceso actual": process.pid,
+            "Version de NodeJs corriendo": process.version,
+            "Titulo del proceso": process.title,
+            "Sistema Operativo": process.platform,   
+            "Uso de memoria": JSON.stringify(process.memoryUsage()),
+            "Cantidad de procesadores": os.cpus().length,
+            "port": args.port
         })
 
     })
