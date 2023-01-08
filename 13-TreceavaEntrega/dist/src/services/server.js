@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -39,30 +39,68 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.logged = void 0;
 var express_1 = __importDefault(require("express"));
 var http_1 = __importDefault(require("http"));
-var morgan_1 = __importDefault(require("morgan"));
 var express_handlebars_1 = require("express-handlebars");
 var index_1 = __importDefault(require("../routes/index"));
 var path_1 = __importDefault(require("path"));
 var products_1 = __importDefault(require("../models/products"));
-var productsController_1 = __importDefault(require("../Controllers/productsController"));
-var mensajesController_1 = __importDefault(require("../Controllers/mensajesController"));
 var messages_1 = __importDefault(require("../models/messages"));
-var app = express_1.default();
-app.use(morgan_1.default('dev'));
+var cookie_parser_1 = __importDefault(require("cookie-parser"));
+var express_session_1 = __importDefault(require("express-session"));
+var os_1 = __importDefault(require("os"));
+var connect_mongo_1 = __importDefault(require("connect-mongo"));
+var index_2 = __importDefault(require("../config/index"));
+var passport_1 = __importDefault(require("passport"));
+var auth_1 = require("./auth");
+var app = (0, express_1.default)();
+app.use("/api", index_1.default);
+// Session Part:
+exports.logged = {
+    islogged: false,
+    isDestroyed: false,
+    nombre: '',
+    contraseña: false
+};
+var unSegundo = 1000;
+var unMinuto = unSegundo * 60;
+var unaHora = unMinuto * 60;
+var unDia = unaHora * 24;
+var storeOptions = {
+    store: connect_mongo_1.default.create({
+        mongoUrl: index_2.default.MONGO_ATLAS_URL,
+        crypto: {
+            secret: index_2.default.CRYPTO_SECRET
+        }
+    }),
+    secret: index_2.default.SECRET,
+    resave: false,
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+        maxAge: unMinuto
+    }
+};
 app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({
+    extended: true
+}));
 app.use(express_1.default.static('public'));
-var prodController = new productsController_1.default();
-var mjController = new mensajesController_1.default();
+app.use((0, cookie_parser_1.default)());
+app.use((0, express_session_1.default)(storeOptions));
+app.use(passport_1.default.initialize());
+app.use(passport_1.default.session());
+passport_1.default.use('login', auth_1.loginFunc);
+passport_1.default.use('signup', auth_1.signUpFunc);
 // HBS PART:
 var viewPath = path_1.default.resolve(__dirname, '../../views');
-var layoutsPath = viewPath + "/layouts";
-var partialsPath = viewPath + "/partials";
-var defaultLayoutPath = layoutsPath + "/index.hbs";
+var layoutsPath = "".concat(viewPath, "/layouts");
+var partialsPath = "".concat(viewPath, "/partials");
+var defaultLayoutPath = "".concat(layoutsPath, "/index.hbs");
 app.set('view engine', 'hbs');
 app.set('views', viewPath);
-app.engine('hbs', express_handlebars_1.engine({
+app.engine('hbs', (0, express_handlebars_1.engine)({
     layoutsDir: layoutsPath,
     extname: 'hbs',
     partialsDir: partialsPath,
@@ -70,17 +108,95 @@ app.engine('hbs', express_handlebars_1.engine({
 }));
 app.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        products_1.default.find({}).then(function (productos) {
-            messages_1.default.find({}).then(function (mensajes) {
-                res.render('main', {
-                    productos: productos.map(function (productoIndv) { return productoIndv.toJSON(); }),
-                    mensajes: mensajes.map(function (mensajeIndv) { return mensajeIndv.toJSON(); })
+        if (req.session.nombre && exports.logged.islogged && !exports.logged.isDestroyed) {
+            +products_1.default.find({}).then(function (productos) {
+                messages_1.default.find({}).then(function (mensajes) {
+                    res.render('main', {
+                        productos: productos.map(function (productoIndv) { return productoIndv.toJSON(); }),
+                        mensajes: mensajes.map(function (mensajeIndv) { return mensajeIndv.toJSON(); }),
+                        user: req.session.nombre
+                    });
                 });
             });
-        });
+        }
+        else {
+            res.redirect("/login");
+        }
         return [2 /*return*/];
     });
 }); });
-app.use("/api", index_1.default);
+app.post('/login', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        passport_1.default.authenticate('login', {}, function (err, user, info) { return __awaiter(void 0, void 0, void 0, function () {
+            var data, token;
+            return __generator(this, function (_a) {
+                data = req.body;
+                if (user.username && user.password) {
+                    token = (0, auth_1.generateAuthToken)(user);
+                    exports.logged.nombre = user.username;
+                    exports.logged.contraseña = true;
+                    exports.logged.islogged = true;
+                    res.header('x-login-token', token).redirect("/");
+                }
+                else {
+                    res.status(400).json({
+                        Error: "Datos ingresados no validos o nulos."
+                    });
+                }
+                return [2 /*return*/];
+            });
+        }); })(req, res, next);
+        return [2 /*return*/];
+    });
+}); });
+app.post('/register', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        passport_1.default.authenticate('signup', {}, function (err, user, info) {
+            var _a = req.body, username = _a.username, password = _a.password;
+            if (!username || !password) {
+                res.status(400).json({
+                    Error: "Datos ingresados no validos o nulos"
+                });
+            }
+            var token = (0, auth_1.generateAuthToken)(user);
+            exports.logged.nombre = username;
+            exports.logged.contraseña = true;
+            exports.logged.islogged = true;
+            res.header('x-login-token', token).redirect("/");
+        })(req, res, next);
+        return [2 /*return*/];
+    });
+}); });
+app.get('/login', function (req, res) {
+    exports.logged.isDestroyed = false;
+    res.render("Login");
+});
+app.get('/register', function (req, res) {
+    res.render("register");
+});
+app.get("/logout", function (req, res) {
+    if (req.session.nombre) {
+        res.render("Logout", {
+            user: req.session.nombre
+        });
+        exports.logged.islogged = false;
+        exports.logged.nombre = "";
+        exports.logged.isDestroyed = true;
+        setTimeout(function () {
+            req.session.destroy(function (err) {
+                console.error(err);
+            });
+        }, unMinuto);
+    }
+    else {
+        res.redirect("/");
+    }
+});
+app.get("/info", function (req, res) {
+    console.log(process.version);
+    res.json({
+        info: "Directorio actual de trabajo ===> ".concat(process.cwd(), ".\n   ID Del proceso actual ====> ").concat(process.pid, ".\n   Version de NodeJs corriendo ====> ").concat(process.version, ".\n   Titulo del proceso ====> ").concat(process.title, ".\n   Sistema Operativo ====> ").concat(process.platform, ".\n   Uso de memoria====> ").concat(JSON.stringify(process.memoryUsage()), ".\n   Cantidad de procesadores ====> ").concat(os_1.default.cpus().length)
+    });
+});
 var HTTPServer = new http_1.default.Server(app);
 module.exports = HTTPServer;

@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -39,51 +39,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createProductMariaDB = exports.getProductsMariaDB = exports.getProductMariaDB = exports.createTableMariaDB = void 0;
-var mariaDb_1 = __importDefault(require("./mariaDb"));
-var createTableMariaDB = function () { return __awaiter(void 0, void 0, void 0, function () {
+exports.getAllDenorm = exports.getAllNorm = void 0;
+var normalizr_1 = require("normalizr");
+var mensajesController_1 = __importDefault(require("./mensajesController"));
+var author = new normalizr_1.schema.Entity('authors', {});
+var message = new normalizr_1.schema.Entity('menssages', { author: author });
+var SchemaFin = [message];
+var getAllNorm = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var mensajes;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, mariaDb_1.default.schema.dropTableIfExists('products')];
+            case 0: return [4 /*yield*/, mensajesController_1.default.list()];
             case 1:
-                _a.sent();
-                return [4 /*yield*/, mariaDb_1.default.schema.createTable('products', function (table) {
-                        table.integer('id').primary;
-                        table.string('title').notNullable;
-                        table.integer('price').notNullable;
-                        table.string('thumbnail').notNullable;
-                    })];
-            case 2:
-                _a.sent();
-                return [2 /*return*/];
+                mensajes = _a.sent();
+                return [2 /*return*/, (0, normalizr_1.normalize)(mensajes, SchemaFin)];
         }
     });
 }); };
-exports.createTableMariaDB = createTableMariaDB;
-var getProductMariaDB = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+exports.getAllNorm = getAllNorm;
+var getAllDenorm = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var mensajesNormalize;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, mariaDb_1.default('products').where("id", id)];
-            case 1: return [2 /*return*/, _a.sent()];
+            case 0: return [4 /*yield*/, (0, exports.getAllNorm)()];
+            case 1:
+                mensajesNormalize = _a.sent();
+                return [2 /*return*/, (0, normalizr_1.denormalize)(mensajesNormalize.result, SchemaFin, mensajesNormalize.entities)];
         }
     });
 }); };
-exports.getProductMariaDB = getProductMariaDB;
-var getProductsMariaDB = function () { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, mariaDb_1.default('products').select('*')];
-            case 1: return [2 /*return*/, _a.sent()];
-        }
-    });
-}); };
-exports.getProductsMariaDB = getProductsMariaDB;
-var createProductMariaDB = function (obj) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, mariaDb_1.default('products').insert(obj)];
-            case 1: return [2 /*return*/, _a.sent()];
-        }
-    });
-}); };
-exports.createProductMariaDB = createProductMariaDB;
+exports.getAllDenorm = getAllDenorm;

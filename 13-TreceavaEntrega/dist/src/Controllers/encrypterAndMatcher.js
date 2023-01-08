@@ -39,63 +39,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = require("express");
-var normalizeController_1 = require("../Controllers/normalizeController");
-var testController_1 = require("../Controllers/testController");
-var child_process_1 = require("child_process");
-var path_1 = __importDefault(require("path"));
-var rutaPrincipal = (0, express_1.Router)();
-var controllerPath = path_1.default.resolve(__dirname, '../Controllers/randomsController.ts');
-rutaPrincipal.get("/normalize", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
-            case 0:
-                _b = (_a = res).json;
-                return [4 /*yield*/, (0, normalizeController_1.getAllNorm)()];
+exports.matchPassword = exports.encryptPasssword = void 0;
+var bcrypt_1 = __importDefault(require("bcrypt"));
+var encryptPasssword = function (password) { return __awaiter(void 0, void 0, void 0, function () {
+    var salt;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, bcrypt_1.default.genSalt(10)];
             case 1:
-                _b.apply(_a, [_c.sent()]);
-                return [2 /*return*/];
+                salt = _a.sent();
+                return [4 /*yield*/, bcrypt_1.default.hash(password, salt)];
+            case 2: return [2 /*return*/, _a.sent()];
         }
     });
-}); });
-rutaPrincipal.get("/denormalize", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
-            case 0:
-                _b = (_a = res).json;
-                return [4 /*yield*/, (0, normalizeController_1.getAllDenorm)()];
-            case 1:
-                _b.apply(_a, [_c.sent()]);
-                return [2 /*return*/];
-        }
-    });
-}); });
-rutaPrincipal.get("/test-fake-products", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, _b;
-    var _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
-            case 0:
-                _b = (_a = res).json;
-                _c = {};
-                return [4 /*yield*/, (0, testController_1.crear5Productos)()];
-            case 1:
-                _b.apply(_a, [(_c.ProductosFake = _d.sent(), _c)]);
-                return [2 /*return*/];
-        }
-    });
-}); });
-rutaPrincipal.get("/randoms", function (req, res) {
-    var cantidad;
-    req.query.cant ? (cantidad = Number(req.query.cant)) : 100000000;
-    var calculo = (0, child_process_1.fork)(controllerPath);
-    calculo.send(JSON.stringify({ msg: "start", cantidad: cantidad }));
-    calculo.on('message', function (result) {
-        res.json({
-            Resultado: result
+}); };
+exports.encryptPasssword = encryptPasssword;
+var matchPassword = function (passwordIngresed, password) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, bcrypt_1.default.compare(passwordIngresed, password)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
         });
     });
-});
-exports.default = rutaPrincipal;
+};
+exports.matchPassword = matchPassword;

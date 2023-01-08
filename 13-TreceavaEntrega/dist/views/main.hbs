@@ -1,0 +1,52 @@
+<div class="container-fluid d-flex justify-content-center importantDiv">
+
+    {{> bienvenida}}
+    {{!-- Lo que puedo hacer es que el login pase los datos al front y de ahí crear el cartel de bienvenida con los datos que traemos.
+    Despues lo que quedaría sería simplemente hacer que ese cartel tenga el boton con en evento que haga el logout --}}
+
+    <div class=" bg-secondary p-3 mb-3 rounded">
+        <h1>Añadir Productos Formulario</h1>
+        <br />
+        {{> form}}
+
+
+    </div>
+</div>
+{{#if productos}}
+<div class="mt-3 p-3 text-center bg-secondary  d-flex justify-content-center flex-column rounded">
+    <h2 class="d-flex p-2">Productos:</h2>
+    <div>{{>listOfProducts}}</div>
+</div>
+{{else}}
+<div class="mt-3 p-3 text-center  bg-secondary d-flex justify-content-center flex-column rounded">
+    <div>
+        <table>
+            <tbody id="listaDeProductos">
+                <thead>
+                    <tr>
+                        <th id="id">ID</th>
+                        <th id="nombreHeader">Nombre</th>
+                        <th id="apellidoHeader">Precio</th>
+                        <th id="edadHeader"> Imagen</th>
+                    </tr>
+                </thead>
+            </tbody>
+        </table>
+    </div>
+    <div id="noProductos" class=" mt-4 text-dark">
+       <h3>No hay Productos...</h3> 
+    </div>
+</div>
+{{/if}}
+<div class="my-5 p-3  text-center bg-secondary  d-flex justify-content-center flex-column rounded">
+
+    <div id="chat" class="esconder" >
+        {{>chat}}
+    </div>
+    <div id="formDeIngreso" class="">
+        <H1>Chat</H1>
+    {{>chatIngreso}}
+    </div>
+    
+
+</div>
