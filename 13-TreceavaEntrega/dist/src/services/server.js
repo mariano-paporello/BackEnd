@@ -49,6 +49,7 @@ var products_1 = __importDefault(require("../models/products"));
 var messages_1 = __importDefault(require("../models/messages"));
 var cookie_parser_1 = __importDefault(require("cookie-parser"));
 var express_session_1 = __importDefault(require("express-session"));
+var os_1 = __importDefault(require("os"));
 var connect_mongo_1 = __importDefault(require("connect-mongo"));
 var index_2 = __importDefault(require("../config/index"));
 var passport_1 = __importDefault(require("passport"));
@@ -56,7 +57,12 @@ var auth_1 = require("./auth");
 var app = (0, express_1.default)();
 app.use("/api", index_1.default);
 // Session Part:
-exports.logged = { islogged: false, isDestroyed: false, nombre: '', contraseña: false };
+exports.logged = {
+    islogged: false,
+    isDestroyed: false,
+    nombre: '',
+    contraseña: false
+};
 var unSegundo = 1000;
 var unMinuto = unSegundo * 60;
 var unaHora = unMinuto * 60;
@@ -72,10 +78,14 @@ var storeOptions = {
     resave: false,
     saveUninitialized: false,
     rolling: true,
-    cookie: { maxAge: unMinuto }
+    cookie: {
+        maxAge: unMinuto
+    }
 };
 app.use(express_1.default.json());
-app.use(express_1.default.urlencoded({ extended: true }));
+app.use(express_1.default.urlencoded({
+    extended: true
+}));
 app.use(express_1.default.static('public'));
 app.use((0, cookie_parser_1.default)());
 app.use((0, express_session_1.default)(storeOptions));
@@ -129,7 +139,9 @@ app.post('/login', function (req, res, next) { return __awaiter(void 0, void 0, 
                     res.header('x-login-token', token).redirect("/");
                 }
                 else {
-                    res.status(400).json({ Error: "Datos ingresados no validos o nulos." });
+                    res.status(400).json({
+                        Error: "Datos ingresados no validos o nulos."
+                    });
                 }
                 return [2 /*return*/];
             });
@@ -142,7 +154,9 @@ app.post('/register', function (req, res, next) { return __awaiter(void 0, void 
         passport_1.default.authenticate('signup', {}, function (err, user, info) {
             var _a = req.body, username = _a.username, password = _a.password;
             if (!username || !password) {
-                res.status(400).json({ Error: "Datos ingresados no validos o nulos" });
+                res.status(400).json({
+                    Error: "Datos ingresados no validos o nulos"
+                });
             }
             var token = (0, auth_1.generateAuthToken)(user);
             exports.logged.nombre = username;
@@ -180,7 +194,9 @@ app.get("/logout", function (req, res) {
 });
 app.get("/info", function (req, res) {
     console.log(process.version);
-    res.json({ info: "Directorio actual de trabajo ===> ".concat(process.cwd(), ".\n   ID Del proceso actual ====> ").concat(process.pid, ".\n   Version de NodeJs corriendo ====> ").concat(process.version, ".\n   Titulo del proceso ====> ").concat(process.title, ".\n   Sistema Operativo ====> ").concat(process.platform, ".\n   Uso de memoria====> ").concat(JSON.stringify(process.memoryUsage()), ".") });
+    res.json({
+        info: "Directorio actual de trabajo ===> ".concat(process.cwd(), ".\n   ID Del proceso actual ====> ").concat(process.pid, ".\n   Version de NodeJs corriendo ====> ").concat(process.version, ".\n   Titulo del proceso ====> ").concat(process.title, ".\n   Sistema Operativo ====> ").concat(process.platform, ".\n   Uso de memoria====> ").concat(JSON.stringify(process.memoryUsage()), ".\n   Cantidad de procesadores ====> ").concat(os_1.default.cpus().length)
+    });
 });
 var HTTPServer = new http_1.default.Server(app);
 module.exports = HTTPServer;
