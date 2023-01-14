@@ -142,6 +142,7 @@ var UsersMongo = /** @class */ (function () {
                         return [4 /*yield*/, newUser.save()];
                     case 1:
                         _a.sent();
+                        console.log("TODOPERFECTO");
                         return [2 /*return*/, newUser];
                 }
             });

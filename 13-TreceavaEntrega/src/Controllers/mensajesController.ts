@@ -1,5 +1,6 @@
 import { mensaje } from "../../Public/types"
 import menssagesMetodos from "../models/messages"
+import {logger} from "../middlewares/loggers"
 
 class mensajeController{
 
@@ -8,9 +9,7 @@ class mensajeController{
          const getAll = await menssagesMetodos.find({})
          return getAll
      }catch(err){
-         return console.log({
-             Error:true,
-             theError:err})
+         return logger.error(err)
      }}
  
  
@@ -30,7 +29,7 @@ class mensajeController{
            const res=  await menssagesMetodos.create(dataCompleta)
             return res
         }catch(err){
-            throw new Error(err)
+           return logger.error(err)
         }  
      }
  }

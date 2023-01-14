@@ -43,6 +43,7 @@ exports.logged = void 0;
 var express_1 = __importDefault(require("express"));
 var http_1 = __importDefault(require("http"));
 var express_handlebars_1 = require("express-handlebars");
+var compression_1 = __importDefault(require("compression"));
 var index_1 = __importDefault(require("../routes/index"));
 var path_1 = __importDefault(require("path"));
 var products_1 = __importDefault(require("../models/products"));
@@ -53,11 +54,13 @@ var os_1 = __importDefault(require("os"));
 var connect_mongo_1 = __importDefault(require("connect-mongo"));
 var index_2 = __importDefault(require("../config/index"));
 var passport_1 = __importDefault(require("passport"));
+var loggers_1 = require("../middlewares/loggers");
 var auth_1 = require("./auth");
 var minimist_1 = __importDefault(require("minimist"));
 var args = (0, minimist_1.default)(process.argv);
 var app = (0, express_1.default)();
 app.use("/api", index_1.default);
+app.use((0, compression_1.default)());
 // Session Part:
 exports.logged = {
     islogged: false,
@@ -110,6 +113,7 @@ app.engine('hbs', (0, express_handlebars_1.engine)({
 }));
 app.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
+        loggers_1.logger.info("METODO:" + req.method + " RUTA:" + req.url);
         if (req.session.nombre && exports.logged.islogged && !exports.logged.isDestroyed) {
             +products_1.default.find({}).then(function (productos) {
                 messages_1.default.find({}).then(function (mensajes) {
@@ -129,6 +133,7 @@ app.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, func
 }); });
 app.post('/login', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
+        loggers_1.logger.info("METODO:" + req.method + " RUTA:" + req.url);
         passport_1.default.authenticate('login', {}, function (err, user, info) { return __awaiter(void 0, void 0, void 0, function () {
             var data, token;
             return __generator(this, function (_a) {
@@ -153,6 +158,7 @@ app.post('/login', function (req, res, next) { return __awaiter(void 0, void 0, 
 }); });
 app.post('/register', function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
+        loggers_1.logger.info("METODO:" + req.method + " RUTA:" + req.url);
         passport_1.default.authenticate('signup', {}, function (err, user, info) {
             var _a = req.body, username = _a.username, password = _a.password;
             if (!username || !password) {
@@ -170,13 +176,16 @@ app.post('/register', function (req, res, next) { return __awaiter(void 0, void 
     });
 }); });
 app.get('/login', function (req, res) {
+    loggers_1.logger.info("METODO:" + req.method + " RUTA:" + req.url);
     exports.logged.isDestroyed = false;
     res.render("Login");
 });
 app.get('/register', function (req, res) {
+    loggers_1.logger.info("METODO:" + req.method + " RUTA:" + req.url);
     res.render("register");
 });
 app.get("/logout", function (req, res) {
+    loggers_1.logger.info("METODO:" + req.method + " RUTA:" + req.url);
     if (req.session.nombre) {
         res.render("Logout", {
             user: req.session.nombre
@@ -186,7 +195,7 @@ app.get("/logout", function (req, res) {
         exports.logged.isDestroyed = true;
         setTimeout(function () {
             req.session.destroy(function (err) {
-                console.error(err);
+                loggers_1.logger.error(err);
             });
         }, unMinuto);
     }
@@ -195,7 +204,7 @@ app.get("/logout", function (req, res) {
     }
 });
 app.get("/info", function (req, res) {
-    console.log(process.version);
+    loggers_1.logger.info("METODO:" + req.method + " RUTA:" + req.url);
     res.json({
         "Directorio actual de trabajo": process.cwd(),
         "id ID Del proceso actual": process.pid,
@@ -206,6 +215,10 @@ app.get("/info", function (req, res) {
         "Cantidad de procesadores": os_1.default.cpus().length,
         "port": args.port
     });
+});
+app.get('*', function (req, res) {
+    loggers_1.logger.warn("METODO:" + req.method + " RUTA:" + req.url);
+    res.status(404).json({ Error: "Inexistent route" });
 });
 var HTTPServer = new http_1.default.Server(app);
 module.exports = HTTPServer;

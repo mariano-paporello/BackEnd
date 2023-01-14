@@ -3,6 +3,7 @@ import http from 'http'
 import {
     engine
 } from 'express-handlebars'
+import compression from "compression"
 import rutaTest from "../routes/index"
 import path from 'path'
 import ProductoModel from '../models/products'
@@ -12,8 +13,8 @@ import session from 'express-session';
 import os from "os"
 import MongoStore from 'connect-mongo'
 import config from '../config/index'
-
 import passport from "passport"
+import {logger }from "../middlewares/loggers"
 import {
     loginFunc,
     signUpFunc,
@@ -34,6 +35,7 @@ declare module 'express-session' {
 const app = express()
 app.use("/api", rutaTest)
 
+app.use(compression())
 
 // Session Part:
 export const logged = {
@@ -93,8 +95,11 @@ export const logged = {
     }))
 
 
+    
+    
 
     app.get('/', async (req, res) => {
+        logger.info( "METODO:"+req.method + " RUTA:"+ req.url )
         if (req.session.nombre && logged.islogged && !logged.isDestroyed) {
             +
             ProductoModel.find({}).then(productos => {
@@ -111,6 +116,7 @@ export const logged = {
         }
     })
     app.post('/login', async (req, res, next) => {
+        logger.info( "METODO:"+req.method + " RUTA:"+ req.url )
         passport.authenticate('login', {}, async (err, user, info) => {
             const data = req.body
             if (user.username && user.password) {
@@ -130,6 +136,7 @@ export const logged = {
 
 
     app.post('/register', async (req, res, next) => {
+        logger.info( "METODO:"+req.method + " RUTA:"+ req.url )
         passport.authenticate('signup', {}, (err, user, info) => {
             const {
                 username,
@@ -151,16 +158,19 @@ export const logged = {
     })
 
     app.get('/login', (req, res) => {
+        logger.info( "METODO:"+req.method + " RUTA:"+ req.url )
         logged.isDestroyed = false
         res.render("Login")
     })
 
     app.get('/register', (req, res) => {
+        logger.info( "METODO:"+req.method + " RUTA:"+ req.url )
         res.render("register")
     })
 
 
     app.get("/logout", (req, res) => {
+        logger.info( "METODO:"+req.method + " RUTA:"+ req.url )
         if (req.session.nombre) {
             res.render("Logout", {
                 user: req.session.nombre
@@ -170,7 +180,7 @@ export const logged = {
             logged.isDestroyed = true
             setTimeout(() => {
                 req.session.destroy((err) => {
-                    console.error(err)
+                    logger.error(err)
                 });
             }, unMinuto)
 
@@ -180,7 +190,7 @@ export const logged = {
     })
 
     app.get("/info", (req, res) => {
-        console.log(process.version)
+        logger.info( "METODO:"+req.method + " RUTA:"+ req.url )
         res.json({
             "Directorio actual de trabajo": process.cwd(),
             "id ID Del proceso actual": process.pid,
@@ -194,7 +204,10 @@ export const logged = {
 
     })
 
-
+    app.get('*', (req, res)=>{
+        logger.warn( "METODO:"+req.method + " RUTA:"+ req.url )
+        res.status(404).json({Error:"Inexistent route"})
+    })
 
 
     const HTTPServer = new http.Server(app);
