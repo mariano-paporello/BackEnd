@@ -43,14 +43,16 @@ var express_1 = require("express");
 var normalizeController_1 = require("../Controllers/normalizeController");
 var testController_1 = require("../Controllers/testController");
 var child_process_1 = require("child_process");
+var loggers_1 = require("../middlewares/loggers");
 var path_1 = __importDefault(require("path"));
 var rutaPrincipal = (0, express_1.Router)();
-var controllerPath = path_1.default.resolve(__dirname, '../Controllers/randomsController.ts');
+var controllerPath = path_1.default.resolve(__dirname, '../Controllers/randomsController.js');
 rutaPrincipal.get("/normalize", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
+                loggers_1.logger.info("METODO:" + req.method + " RUTA:" + req.url);
                 _b = (_a = res).json;
                 return [4 /*yield*/, (0, normalizeController_1.getAllNorm)()];
             case 1:
@@ -64,6 +66,7 @@ rutaPrincipal.get("/denormalize", function (req, res) { return __awaiter(void 0,
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
+                loggers_1.logger.info("METODO:" + req.method + " RUTA:" + req.url);
                 _b = (_a = res).json;
                 return [4 /*yield*/, (0, normalizeController_1.getAllDenorm)()];
             case 1:
@@ -78,6 +81,7 @@ rutaPrincipal.get("/test-fake-products", function (req, res) { return __awaiter(
     return __generator(this, function (_d) {
         switch (_d.label) {
             case 0:
+                loggers_1.logger.info("METODO:" + req.method + " RUTA:" + req.url);
                 _b = (_a = res).json;
                 _c = {};
                 return [4 /*yield*/, (0, testController_1.crear5Productos)()];
@@ -88,8 +92,15 @@ rutaPrincipal.get("/test-fake-products", function (req, res) { return __awaiter(
     });
 }); });
 rutaPrincipal.get("/randoms", function (req, res) {
+    // logger.info( "METODO:"+req.method + " RUTA:"+ req.url )
     var cantidad;
-    req.query.cant ? (cantidad = Number(req.query.cant)) : 100000000;
+    if (req.query.cant) {
+        (cantidad = Number(req.query.cant));
+    }
+    else {
+        100000000;
+    }
+    ;
     var calculo = (0, child_process_1.fork)(controllerPath);
     calculo.send(JSON.stringify({ msg: "start", cantidad: cantidad }));
     calculo.on('message', function (result) {

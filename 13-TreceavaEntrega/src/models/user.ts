@@ -59,6 +59,7 @@ class UsersMongo{
     async singUp(data){
         const newUser = this.users(data);
         await newUser.save();
+        console.log("TODOPERFECTO")
         return newUser
     }
     

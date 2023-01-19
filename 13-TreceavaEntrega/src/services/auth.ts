@@ -60,6 +60,7 @@ console.log("LOOOGEOOO")
       const user=await usersModel.singUp({username, password})
       req.session.nombre =  user.username
       req.session.contraseña= user.password
+      
       return done(null,  user)
     } catch (err) {
       console.log('Hubo un error!');

@@ -1,10 +1,9 @@
 
-const  randomCreator = (cantidad:number)=>{
+export const  randomCreator = (cantidad:number)=>{
 const list = {}
 for(let i=0;i<cantidad;i++){
     
      let numberKey = Math.round(Math.random()*(1000))
-     console.log(numberKey)
      if(numberKey in list){
         list[numberKey]++
      }else{
@@ -19,7 +18,6 @@ process.on('message', async (msg:any)=>{
   if (msg.msg == 'start') {
     console.log('Start Process');
     const result = randomCreator(Number(msg.cantidad));
-    console.log("el resultado es: "+ JSON.stringify(result))
     if (process && process.send) {
       process.send(result);
     }

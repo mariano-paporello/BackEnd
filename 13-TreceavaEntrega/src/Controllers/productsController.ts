@@ -1,5 +1,6 @@
 import { producto } from "../../Public/types"
 import productosModels from "../models/products"
+import {logger} from "../middlewares/loggers"
 class productsController{
 
    async list(){
@@ -8,9 +9,7 @@ class productsController{
         console.log(getAll)
         return getAll
     }catch(err){
-        return console.log({
-            Error:true,
-            theError:err})
+        return logger.error(err)
     }}
 
 
@@ -23,7 +22,7 @@ class productsController{
        console.log(res)
         return res
    }catch(err){
-    throw new Error(err)
+    return logger.error(err)
    }    
     }
 }

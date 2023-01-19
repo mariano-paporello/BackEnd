@@ -51,6 +51,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var products_1 = __importDefault(require("../models/products"));
+var loggers_1 = require("../middlewares/loggers");
 var productsController = /** @class */ (function () {
     function productsController() {
     }
@@ -68,10 +69,7 @@ var productsController = /** @class */ (function () {
                         return [2 /*return*/, getAll];
                     case 2:
                         err_1 = _a.sent();
-                        return [2 /*return*/, console.log({
-                                Error: true,
-                                theError: err_1
-                            })];
+                        return [2 /*return*/, loggers_1.logger.error(err_1)];
                     case 3: return [2 /*return*/];
                 }
             });
@@ -92,7 +90,7 @@ var productsController = /** @class */ (function () {
                         return [2 /*return*/, res];
                     case 2:
                         err_2 = _a.sent();
-                        throw new Error(err_2);
+                        return [2 /*return*/, loggers_1.logger.error(err_2)];
                     case 3: return [2 /*return*/];
                 }
             });

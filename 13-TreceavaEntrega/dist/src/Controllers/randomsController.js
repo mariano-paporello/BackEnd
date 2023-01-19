@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,12 +35,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.randomCreator = void 0;
 var randomCreator = function (cantidad) {
     var list = {};
     for (var i = 0; i < cantidad; i++) {
         var numberKey = Math.round(Math.random() * (1000));
-        console.log(numberKey);
         if (numberKey in list) {
             list[numberKey]++;
         }
@@ -49,14 +50,14 @@ var randomCreator = function (cantidad) {
     }
     return list;
 };
-process.on('message', function (msg) { return __awaiter(_this, void 0, void 0, function () {
+exports.randomCreator = randomCreator;
+process.on('message', function (msg) { return __awaiter(void 0, void 0, void 0, function () {
     var result;
     return __generator(this, function (_a) {
         msg = JSON.parse(msg);
         if (msg.msg == 'start') {
             console.log('Start Process');
-            result = randomCreator(Number(msg.cantidad));
-            console.log("el resultado es: " + JSON.stringify(result));
+            result = (0, exports.randomCreator)(Number(msg.cantidad));
             if (process && process.send) {
                 process.send(result);
             }
