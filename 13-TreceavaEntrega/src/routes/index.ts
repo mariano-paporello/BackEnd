@@ -28,13 +28,13 @@ rutaPrincipal.get("/randoms", (req, res)=>{
     // logger.info( "METODO:"+req.method + " RUTA:"+ req.url )
     let cantidad
     if(req.query.cant){(cantidad = Number(req.query.cant))}else{ 100000000};
-    // const calculo = fork(controllerPath)
-    // calculo.send(JSON.stringify({msg:"start", cantidad:cantidad}))
-    // calculo.on('message', (result)=>{
+    const calculo = fork(controllerPath)
+    calculo.send(JSON.stringify({msg:"start", cantidad:cantidad}))
+    calculo.on('message', (result)=>{
         res.json({
-            Resultado: randomCreator(cantidad)
+            Resultado: result
         })
-    // })
+    })
     
 })
 

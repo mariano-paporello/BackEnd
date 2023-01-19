@@ -42,8 +42,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var normalizeController_1 = require("../Controllers/normalizeController");
 var testController_1 = require("../Controllers/testController");
+var child_process_1 = require("child_process");
 var loggers_1 = require("../middlewares/loggers");
-var randomsController_1 = require("../Controllers/randomsController");
 var path_1 = __importDefault(require("path"));
 var rutaPrincipal = (0, express_1.Router)();
 var controllerPath = path_1.default.resolve(__dirname, '../Controllers/randomsController.js');
@@ -101,12 +101,12 @@ rutaPrincipal.get("/randoms", function (req, res) {
         100000000;
     }
     ;
-    // const calculo = fork(controllerPath)
-    // calculo.send(JSON.stringify({msg:"start", cantidad:cantidad}))
-    // calculo.on('message', (result)=>{
-    res.json({
-        Resultado: (0, randomsController_1.randomCreator)(cantidad)
+    var calculo = (0, child_process_1.fork)(controllerPath);
+    calculo.send(JSON.stringify({ msg: "start", cantidad: cantidad }));
+    calculo.on('message', function (result) {
+        res.json({
+            Resultado: result
+        });
     });
-    // })
 });
 exports.default = rutaPrincipal;

@@ -11,7 +11,7 @@
     "start:cluster": "node ./dist/src/index.js ",
     "pm2:startFORK": "pm2 start ./dist/src/index.js",
     "pm2:startCLUSTER": "pm2 start dist/src/index.js --name='ServerPrueba' --watch -i max",
-    "artillery:fork": "artillery quick --count 30 -n 170 http://localhost:8083/api/randoms?cant=1000000 > result_lol.txt",
+    "artillery:fork": "artillery quick --count 50 -n 20 http://localhost:8083/api/randoms?cant=1000000",
     "pm2:list": "pm2 list",
     "pm2:stop": "pm2 stop all",
     "build": "tsc",
