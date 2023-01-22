@@ -1,4 +1,0 @@
-Phase started: unnamed (index: 0, duration: 1s) 22:19:40(-0300)
-
-Phase completed: unnamed (index: 0, duration: 1s) 22:19:42(-0300)
-
