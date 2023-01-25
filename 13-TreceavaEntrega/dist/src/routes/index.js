@@ -42,7 +42,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var normalizeController_1 = require("../Controllers/normalizeController");
 var testController_1 = require("../Controllers/testController");
-var child_process_1 = require("child_process");
 var loggers_1 = require("../middlewares/loggers");
 var path_1 = __importDefault(require("path"));
 var rutaPrincipal = (0, express_1.Router)();
@@ -101,12 +100,12 @@ rutaPrincipal.get("/randoms", function (req, res) {
         100000000;
     }
     ;
-    var calculo = (0, child_process_1.fork)(controllerPath);
-    calculo.send(JSON.stringify({ msg: "start", cantidad: cantidad }));
-    calculo.on('message', function (result) {
-        res.json({
-            Resultado: result
-        });
+    // const calculo = fork(controllerPath)
+    // calculo.send(JSON.stringify({msg:"start", cantidad:cantidad}))
+    // calculo.on('message', (result)=>{
+    res.json({
+        Resultado: cantidad
     });
 });
+// })
 exports.default = rutaPrincipal;

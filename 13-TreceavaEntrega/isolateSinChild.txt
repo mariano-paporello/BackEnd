@@ -1,0 +1,258 @@
+Statistical profiling result from isolateSinChild.log, (894 ticks, 0 unaccounted, 0 excluded).
+
+ [Shared libraries]:
+   ticks  total  nonlib   name
+    694   77.6%          C:\Windows\SYSTEM32\ntdll.dll
+    196   21.9%          C:\Program Files\nodejs\node.exe
+
+ [JavaScript]:
+   ticks  total  nonlib   name
+      2    0.2%   50.0%  LazyCompile: *resolve node:path:158:10
+      1    0.1%   25.0%  LazyCompile: *toNamespacedPath node:path:618:19
+      1    0.1%   25.0%  Function: ^realpathSync node:fs:2412:22
+
+ [C++]:
+   ticks  total  nonlib   name
+
+ [Summary]:
+   ticks  total  nonlib   name
+      4    0.4%  100.0%  JavaScript
+      0    0.0%    0.0%  C++
+      5    0.6%  125.0%  GC
+    890   99.6%          Shared libraries
+
+ [C++ entry points]:
+   ticks    cpp   total   name
+
+ [Bottom up (heavy) profile]:
+  Note: percentage shows a share of a particular caller in the total
+  amount of its parent calls.
+  Callers occupying less than 1.0% are not shown.
+
+   ticks parent  name
+    694   77.6%  C:\Windows\SYSTEM32\ntdll.dll
+     24    3.5%    C:\Program Files\nodejs\node.exe
+      2    8.3%      C:\Program Files\nodejs\node.exe
+      1   50.0%        LazyCompile: ~module.exports C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@colors\colors\lib\system\has-flag.js:27:26
+      1  100.0%          Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@colors\colors\lib\system\supports-colors.js:1:1
+      1  100.0%            Function: ^Module._compile node:internal/modules/cjs/loader:1057:37
+      1   50.0%        LazyCompile: *compileFunction node:vm:308:25
+      1  100.0%          Function: ^wrapSafe node:internal/modules/cjs/loader:1017:18
+      1  100.0%            Function: ^Module._compile node:internal/modules/cjs/loader:1057:37
+      1    4.2%      LazyCompile: ~x C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\de\address\city.js:1:388
+      1  100.0%        Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\de\address\city.js:1:1
+      1  100.0%          Function: ^Module._compile node:internal/modules/cjs/loader:1057:37
+      1  100.0%            Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1    4.2%      LazyCompile: ~u C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\hr\address\default_country.js:1:388
+      1  100.0%        Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\hr\address\default_country.js:1:1
+      1  100.0%          Function: ^Module._compile node:internal/modules/cjs/loader:1057:37
+      1  100.0%            Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1    4.2%      LazyCompile: ~p C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\nl_BE\name\prefix.js:1:388
+      1  100.0%        Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\nl_BE\name\prefix.js:1:1
+      1  100.0%          LazyCompile: *Module._compile node:internal/modules/cjs/loader:1057:37
+      1  100.0%            Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1    4.2%      LazyCompile: ~o C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\de_AT\company\name_patterns.js:1:388
+      1  100.0%        Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\de_AT\company\name_patterns.js:1:1
+      1  100.0%          Function: ^Module._compile node:internal/modules/cjs/loader:1057:37
+      1  100.0%            Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1    4.2%      LazyCompile: ~get C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\zh_CN\name\first_name.js:1:324
+      1  100.0%        LazyCompile: ~get C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\zh_CN\name\index.js:1:368
+      1  100.0%          Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\zh_CN\name\index.js:1:1
+      1  100.0%            LazyCompile: *Module._compile node:internal/modules/cjs/loader:1057:37
+      1    4.2%      LazyCompile: ~db C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\mongodb\lib\mongo_client.js:214:7
+      1  100.0%        LazyCompile: ~_setClient C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\mongoose\lib\connection.js:859:20
+      1  100.0%          LazyCompile: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\mongoose\lib\connection.js:810:20
+      1  100.0%            LazyCompile: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\mongodb\lib\utils.js:349:18
+      1    4.2%      LazyCompile: ~d C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\en\internet\domain_suffix.js:1:388
+      1  100.0%        Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\en\internet\domain_suffix.js:1:1
+      1  100.0%          Function: ^Module._compile node:internal/modules/cjs/loader:1057:37
+      1  100.0%            Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1    4.2%      LazyCompile: ~createWritableStdioStream node:internal/bootstrap/switches/is_main_thread:41:35
+      1  100.0%        LazyCompile: ~getStderr node:internal/bootstrap/switches/is_main_thread:137:19
+      1  100.0%          Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\finalhandler\node_modules\debug\src\node.js:1:1
+      1  100.0%            LazyCompile: ~Module._compile node:internal/modules/cjs/loader:1057:37
+      1    4.2%      LazyCompile: ~command C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\mongodb\lib\cmap\connection.js:274:12
+      1  100.0%        LazyCompile: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\mongodb\lib\cmap\connect.js:78:43
+      1  100.0%          LazyCompile: ~prepareHandshakeDocument C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\mongodb\lib\cmap\connect.js:151:34
+      1  100.0%            LazyCompile: ~performInitialHandshake C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\mongodb\lib\cmap\connect.js:62:33
+      1    4.2%      LazyCompile: ~c C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\en\color\space.js:1:388
+      1  100.0%        Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\en\color\space.js:1:1
+      1  100.0%          Function: ^Module._compile node:internal/modules/cjs/loader:1057:37
+      1  100.0%            Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1    4.2%      LazyCompile: ~addListener node:events:622:58
+      1  100.0%        LazyCompile: ~setupWarningHandler node:internal/bootstrap/pre_execution:134:29
+      1  100.0%          LazyCompile: ~prepareMainThreadExecution node:internal/bootstrap/pre_execution:22:36
+      1  100.0%            Function: ~<anonymous> node:internal/main/run_main_module:1:1
+      1    4.2%      LazyCompile: ~acquire C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\mongodb\lib\sessions.js:593:12
+      1  100.0%        LazyCompile: ~get serverSession C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\mongodb\lib\sessions.js:86:22
+      1  100.0%          LazyCompile: ~applySession C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\mongodb\lib\sessions.js:649:22
+      1  100.0%            LazyCompile: ~command C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\mongodb\lib\cmap\connection.js:274:12
+      1    4.2%      LazyCompile: ~R C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\en\name\middle_name.js:1:388
+      1  100.0%        Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\en\name\middle_name.js:1:1
+      1  100.0%          Function: ^Module._compile node:internal/modules/cjs/loader:1057:37
+      1  100.0%            Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1    4.2%      LazyCompile: *readPackageScope node:internal/modules/cjs/loader:321:26
+      1  100.0%        LazyCompile: *Module._resolveFilename node:internal/modules/cjs/loader:848:35
+      1  100.0%          LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      1  100.0%            Function: ^Module.require node:internal/modules/cjs/loader:997:36
+      1    4.2%      Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\modules\vehicle\index.js:1:1
+      1  100.0%        Function: ^Module._compile node:internal/modules/cjs/loader:1057:37
+      1  100.0%          Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1  100.0%            Function: ^Module.load node:internal/modules/cjs/loader:969:33
+      1    4.2%      Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\ru\address\index.js:1:1
+      1  100.0%        LazyCompile: *Module._compile node:internal/modules/cjs/loader:1057:37
+      1  100.0%          Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1  100.0%            LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      1    4.2%      Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\ja\name\index.js:1:1
+      1  100.0%        LazyCompile: *Module._compile node:internal/modules/cjs/loader:1057:37
+      1  100.0%          Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1  100.0%            LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      1    4.2%      Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\it\company\index.js:1:1
+      1  100.0%        LazyCompile: *Module._compile node:internal/modules/cjs/loader:1057:37
+      1  100.0%          Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1  100.0%            LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      1    4.2%      Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\hu\word\index.js:1:1
+      1  100.0%        Function: ^Module._compile node:internal/modules/cjs/loader:1057:37
+      1  100.0%          Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1  100.0%            LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      1    4.2%      Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\en_AU\address\index.js:1:1
+      1  100.0%        Function: ^Module._compile node:internal/modules/cjs/loader:1057:37
+      1  100.0%          Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1  100.0%            Function: ^Module.load node:internal/modules/cjs/loader:969:33
+      1    4.2%      Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\az\company\index.js:1:1
+      1  100.0%        Function: ^Module._compile node:internal/modules/cjs/loader:1057:37
+      1  100.0%          Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1  100.0%            Function: ^Module.load node:internal/modules/cjs/loader:969:33
+      1    4.2%      Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\dist\src\middlewares\loggers.js:1:1
+      1  100.0%        Function: ^Module._compile node:internal/modules/cjs/loader:1057:37
+      1  100.0%          Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1  100.0%            Function: ^Module.load node:internal/modules/cjs/loader:969:33
+     11    1.6%    LazyCompile: *stat node:internal/modules/cjs/loader:151:14
+     10   90.9%      Function: ^tryFile node:internal/modules/cjs/loader:384:17
+      9   90.0%        LazyCompile: *Module._findPath node:internal/modules/cjs/loader:494:28
+      5   55.6%          Function: ^Module._resolveFilename node:internal/modules/cjs/loader:848:35
+      4   80.0%            LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      1   20.0%            Function: ^Module._load node:internal/modules/cjs/loader:757:24
+      4   44.4%          LazyCompile: *Module._resolveFilename node:internal/modules/cjs/loader:848:35
+      4  100.0%            LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      1   10.0%        Function: ^tryExtensions node:internal/modules/cjs/loader:400:23
+      1  100.0%          Function: ^tryPackage node:internal/modules/cjs/loader:338:20
+      1  100.0%            LazyCompile: *Module._findPath node:internal/modules/cjs/loader:494:28
+      1    9.1%      Function: ^Module._findPath node:internal/modules/cjs/loader:494:28
+      1  100.0%        LazyCompile: *Module._resolveFilename node:internal/modules/cjs/loader:848:35
+      1  100.0%          LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      1  100.0%            LazyCompile: *Module.require node:internal/modules/cjs/loader:997:36
+      7    1.0%    LazyCompile: *Module._findPath node:internal/modules/cjs/loader:494:28
+      4   57.1%      Function: ^Module._resolveFilename node:internal/modules/cjs/loader:848:35
+      4  100.0%        LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      4  100.0%          Function: ^Module.require node:internal/modules/cjs/loader:997:36
+      4  100.0%            Function: ^require node:internal/modules/cjs/helpers:101:31
+      3   42.9%      LazyCompile: *Module._resolveFilename node:internal/modules/cjs/loader:848:35
+      3  100.0%        LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      2   66.7%          Function: ^Module.require node:internal/modules/cjs/loader:997:36
+      2  100.0%            Function: ^require node:internal/modules/cjs/helpers:101:31
+      1   33.3%          LazyCompile: *Module.require node:internal/modules/cjs/loader:997:36
+      1  100.0%            Function: ^require node:internal/modules/cjs/helpers:101:31
+
+    196   21.9%  C:\Program Files\nodejs\node.exe
+    143   73.0%    C:\Program Files\nodejs\node.exe
+     42   29.4%      Function: ^compileFunction node:vm:308:25
+     41   97.6%        Function: ^wrapSafe node:internal/modules/cjs/loader:1017:18
+     41  100.0%          Function: ^Module._compile node:internal/modules/cjs/loader:1057:37
+     41  100.0%            Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1    2.4%        LazyCompile: ~wrapSafe node:internal/modules/cjs/loader:1017:18
+      1  100.0%          LazyCompile: ~Module._compile node:internal/modules/cjs/loader:1057:37
+      1  100.0%            LazyCompile: ~Module._extensions..js node:internal/modules/cjs/loader:1112:37
+     17   11.9%      Function: ^realpathSync node:fs:2412:22
+     17  100.0%        Function: ^toRealPath node:internal/modules/cjs/loader:393:20
+     17  100.0%          Function: ^tryFile node:internal/modules/cjs/loader:384:17
+     10   58.8%            LazyCompile: *Module._findPath node:internal/modules/cjs/loader:494:28
+      6   35.3%            Function: ^tryExtensions node:internal/modules/cjs/loader:400:23
+      1    5.9%            Function: ^tryPackage node:internal/modules/cjs/loader:338:20
+      6    4.2%      Function: ^stat node:internal/modules/cjs/loader:151:14
+      4   66.7%        Function: ^tryFile node:internal/modules/cjs/loader:384:17
+      2   50.0%          LazyCompile: *Module._findPath node:internal/modules/cjs/loader:494:28
+      2  100.0%            Function: ^Module._resolveFilename node:internal/modules/cjs/loader:848:35
+      2   50.0%          Function: ^tryExtensions node:internal/modules/cjs/loader:400:23
+      1   50.0%            Function: ^tryPackage node:internal/modules/cjs/loader:338:20
+      1   50.0%            Function: ^Module._findPath node:internal/modules/cjs/loader:494:28
+      2   33.3%        Function: ^Module._findPath node:internal/modules/cjs/loader:494:28
+      2  100.0%          Function: ^Module._resolveFilename node:internal/modules/cjs/loader:848:35
+      2  100.0%            Function: ^Module._load node:internal/modules/cjs/loader:757:24
+      5    3.5%      Function: ^openSync node:fs:576:18
+      5  100.0%        Function: ^readFileSync node:fs:450:22
+      5  100.0%          Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      3   60.0%            LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      2   40.0%            Function: ^Module.load node:internal/modules/cjs/loader:969:33
+      5    3.5%      Function: ^compileForInternalLoader node:internal/bootstrap/loaders:299:27
+      3   60.0%        Function: ^compileForPublicLoader node:internal/bootstrap/loaders:246:25
+      2   66.7%          Function: ^loadNativeModule node:internal/modules/cjs/helpers:44:26
+      2  100.0%            Function: ^Module._load node:internal/modules/cjs/loader:757:24
+      1   33.3%          LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      1  100.0%            LazyCompile: *Module.require node:internal/modules/cjs/loader:997:36
+      2   40.0%        Function: ^nativeModuleRequire node:internal/bootstrap/loaders:332:29
+      1   50.0%          Function: ~<anonymous> node:tls:1:1
+      1  100.0%            Function: ^compileForInternalLoader node:internal/bootstrap/loaders:299:27
+      1   50.0%          Function: ~<anonymous> node:_http_client:1:1
+      1  100.0%            Function: ^compileForInternalLoader node:internal/bootstrap/loaders:299:27
+      4    2.8%      Function: ^readSync node:fs:684:18
+      3   75.0%        Function: ^tryReadSync node:fs:429:21
+      3  100.0%          Function: ^readFileSync node:fs:450:22
+      3  100.0%            Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1   25.0%        LazyCompile: *readFileSync node:fs:450:22
+      1  100.0%          Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1  100.0%            LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      4    2.8%      C:\Program Files\nodejs\node.exe
+      1   25.0%        LazyCompile: ~x C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\ko\name\first_name.js:1:215
+      1  100.0%          LazyCompile: ~b C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\ko\name\first_name.js:1:388
+      1  100.0%            Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\ko\name\first_name.js:1:1
+      1   25.0%        LazyCompile: *Module._findPath node:internal/modules/cjs/loader:494:28
+      1  100.0%          Function: ^Module._resolveFilename node:internal/modules/cjs/loader:848:35
+      1  100.0%            LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      1   25.0%        Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\mquery\node_modules\debug\src\node.js:1:1
+      1  100.0%          Function: ^Module._compile node:internal/modules/cjs/loader:1057:37
+      1  100.0%            Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      1   25.0%        Function: ^get C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\tr\address\index.js:1:368
+      1  100.0%          LazyCompile: ~get C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\tr\index.js:1:368
+      1  100.0%            Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\tr\index.js:1:1
+      2    1.4%      LazyCompile: ~handleWriteReq node:internal/stream_base_commons:45:24
+      2  100.0%        LazyCompile: ~writeGeneric node:internal/stream_base_commons:147:22
+      2  100.0%          LazyCompile: ~Socket._writeGeneric node:net:769:42
+      2  100.0%            LazyCompile: ~Socket._write node:net:806:35
+      2    1.4%      LazyCompile: *resolve node:path:158:10
+      1   50.0%        Function: ^tryPackage node:internal/modules/cjs/loader:338:20
+      1  100.0%          LazyCompile: *Module._findPath node:internal/modules/cjs/loader:494:28
+      1  100.0%            LazyCompile: *Module._resolveFilename node:internal/modules/cjs/loader:848:35
+      1   50.0%        Function: ^realpathSync node:fs:2412:22
+      1  100.0%          Function: ^toRealPath node:internal/modules/cjs/loader:393:20
+      1  100.0%            Function: ^tryFile node:internal/modules/cjs/loader:384:17
+     32   16.3%    LazyCompile: *compileFunction node:vm:308:25
+     32  100.0%      Function: ^wrapSafe node:internal/modules/cjs/loader:1017:18
+     19   59.4%        LazyCompile: *Module._compile node:internal/modules/cjs/loader:1057:37
+     19  100.0%          Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+     19  100.0%            LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+     13   40.6%        Function: ^Module._compile node:internal/modules/cjs/loader:1057:37
+     13  100.0%          Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+     10   76.9%            LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      3   23.1%            Function: ^Module.load node:internal/modules/cjs/loader:969:33
+      2    1.0%    LazyCompile: *readFileSync node:fs:450:22
+      2  100.0%      Function: ^Module._extensions..js node:internal/modules/cjs/loader:1112:37
+      2  100.0%        LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      2  100.0%          Function: ^Module.require node:internal/modules/cjs/loader:997:36
+      2  100.0%            Function: ^require node:internal/modules/cjs/helpers:101:31
+      2    1.0%    Function: ^toRealPath node:internal/modules/cjs/loader:393:20
+      2  100.0%      Function: ^tryFile node:internal/modules/cjs/loader:384:17
+      2  100.0%        LazyCompile: *Module._findPath node:internal/modules/cjs/loader:494:28
+      2  100.0%          Function: ^Module._resolveFilename node:internal/modules/cjs/loader:848:35
+      1   50.0%            LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      1   50.0%            Function: ^Module._load node:internal/modules/cjs/loader:757:24
+      2    1.0%    Function: ^Module._resolveFilename node:internal/modules/cjs/loader:848:35
+      1   50.0%      LazyCompile: *Module._load node:internal/modules/cjs/loader:757:24
+      1  100.0%        Function: ^Module.require node:internal/modules/cjs/loader:997:36
+      1  100.0%          Function: ^require node:internal/modules/cjs/helpers:101:31
+      1  100.0%            Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\@faker-js\faker\dist\cjs\locales\index.js:1:1
+      1   50.0%      Function: ^Module._load node:internal/modules/cjs/loader:757:24
+      1  100.0%        Function: ^Module.require node:internal/modules/cjs/loader:997:36
+      1  100.0%          Function: ^require node:internal/modules/cjs/helpers:101:31
+      1  100.0%            Function: ~<anonymous> C:\Users\maria\Documents\BackEnd\13-TreceavaEntrega\node_modules\mongodb\lib\utils.js:1:1
+
